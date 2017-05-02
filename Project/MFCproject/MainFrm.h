@@ -9,10 +9,11 @@ class CMainFrame : public CFrameWnd
 	
 protected: // 仅从序列化创建
 	CMainFrame();
-	DECLARE_DYNCREATE(CMainFrame)
+	DECLARE_DYNCREATE(CMainFrame);
 
 // 特性
 public:
+	CSplitterWnd m_splitWnd;
 
 // 操作
 public:
@@ -20,6 +21,7 @@ public:
 // 重写
 public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs,CCreateContext *pContext);
 
 // 实现
 public:
@@ -30,7 +32,6 @@ public:
 #endif
 
 protected:  // 控件条嵌入成员
-	CToolBar          m_wndToolBar;
 	CStatusBar        m_wndStatusBar;
 
 // 生成的消息映射函数

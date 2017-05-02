@@ -101,6 +101,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BottomFormView.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MFCproject.h" />
     <ClInclude Include="MFCprojectDoc.h" />
@@ -108,8 +109,10 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TopFormView.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BottomFormView.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MFCproject.cpp" />
     <ClCompile Include="MFCprojectDoc.cpp" />
@@ -118,6 +121,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TopFormView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MFCproject.reg" />
@@ -134,4 +138,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="MFCproject.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>
