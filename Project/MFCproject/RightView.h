@@ -1,10 +1,9 @@
 #pragma once
 
 
+// CRightView 视图
 
-// CRightView 窗体视图
-
-class CRightView : public CFormView
+class CRightView : public CView
 {
 	DECLARE_DYNCREATE(CRightView)
 
@@ -13,7 +12,7 @@ protected:
 	virtual ~CRightView();
 
 public:
-	enum { IDD = IDD_RIGHTVIEW };
+	virtual void OnDraw(CDC* pDC);      // 重写以绘制该视图
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 #ifndef _WIN32_WCE
@@ -22,8 +21,6 @@ public:
 #endif
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
-
 	DECLARE_MESSAGE_MAP()
 };
 

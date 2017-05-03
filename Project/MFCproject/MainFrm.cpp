@@ -65,17 +65,7 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 	return TRUE;
 }
 
-BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs,CCreateContext*pContext)
-{
-	BOOL bFlag = m_splitWnd.CreateStatic(this, 1, 2);    
-    if (bFlag)    
-    {    
-        CSize sz(100, 100);    
-        m_splitWnd.CreateView(0, 0, RUNTIME_CLASS(CLeftView), sz, pContext);    
-        m_splitWnd.CreateView(1, 0, RUNTIME_CLASS(CRightView), sz, pContext);    
-    } 
-    return bFlag;
-}
+
 
 // CMainFrame 诊断
 
@@ -94,3 +84,19 @@ void CMainFrame::Dump(CDumpContext& dc) const
 
 // CMainFrame 消息处理程序
 
+
+
+BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
+{
+	// TODO: 在此添加专用代码和/或调用基类
+	BOOL bFlag = m_splitWnd.CreateStatic(this,1,2);
+	if (bFlag)
+	{
+		CSize sz(550,100);
+		m_splitWnd.CreateView(0,0,RUNTIME_CLASS(CLeftView),sz,pContext);
+		m_splitWnd.CreateView(0,1,RUNTIME_CLASS(CRightView),sz,pContext);
+
+	}
+	return bFlag;
+	//return CFrameWnd::OnCreateClient(lpcs, pContext);
+}

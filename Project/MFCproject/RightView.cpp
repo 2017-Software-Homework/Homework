@@ -8,10 +8,9 @@
 
 // CRightView
 
-IMPLEMENT_DYNCREATE(CRightView, CFormView)
+IMPLEMENT_DYNCREATE(CRightView, CView)
 
 CRightView::CRightView()
-	: CFormView(CRightView::IDD)
 {
 
 }
@@ -20,13 +19,17 @@ CRightView::~CRightView()
 {
 }
 
-void CRightView::DoDataExchange(CDataExchange* pDX)
-{
-	CFormView::DoDataExchange(pDX);
-}
-
-BEGIN_MESSAGE_MAP(CRightView, CFormView)
+BEGIN_MESSAGE_MAP(CRightView, CView)
 END_MESSAGE_MAP()
+
+
+// CRightView 绘图
+
+void CRightView::OnDraw(CDC* pDC)
+{
+	CDocument* pDoc = GetDocument();
+	// TODO: 在此添加绘制代码
+}
 
 
 // CRightView 诊断
@@ -34,13 +37,13 @@ END_MESSAGE_MAP()
 #ifdef _DEBUG
 void CRightView::AssertValid() const
 {
-	CFormView::AssertValid();
+	CView::AssertValid();
 }
 
 #ifndef _WIN32_WCE
 void CRightView::Dump(CDumpContext& dc) const
 {
-	CFormView::Dump(dc);
+	CView::Dump(dc);
 }
 #endif
 #endif //_DEBUG
