@@ -21,7 +21,7 @@ public:
 // ÷ÿ–¥
 public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs,CCreateContext *pContext);
+	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 
 //  µœ÷
 public:

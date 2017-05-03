@@ -2,18 +2,18 @@
 
 
 
-// CTopFormView 窗体视图
+// CLeftView 窗体视图
 
-class CTopFormView : public CFormView
+class CLeftView : public CFormView
 {
-	DECLARE_DYNCREATE(CTopFormView)
+	DECLARE_DYNCREATE(CLeftView)
 
 protected:
-	CTopFormView();           // 动态创建所使用的受保护的构造函数
-	virtual ~CTopFormView();
+	CLeftView();           // 动态创建所使用的受保护的构造函数
+	virtual ~CLeftView();
 
 public:
-	enum { IDD = IDD_TOPFORMVIEW };
+	enum { IDD = IDD_LEFTVIEW };
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 #ifndef _WIN32_WCE

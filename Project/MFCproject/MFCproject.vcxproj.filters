@@ -39,10 +39,10 @@
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="TopFormView.h">
+    <ClInclude Include="LeftView.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="BottomFormView.h">
+    <ClInclude Include="RightView.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -62,10 +62,10 @@
     <ClCompile Include="MFCprojectView.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TopFormView.cpp">
+    <ClCompile Include="LeftView.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="BottomFormView.cpp">
+    <ClCompile Include="RightView.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,18 +2,18 @@
 
 
 
-// CBottomFormView 窗体视图
+// CRightView 窗体视图
 
-class CBottomFormView : public CFormView
+class CRightView : public CFormView
 {
-	DECLARE_DYNCREATE(CBottomFormView)
+	DECLARE_DYNCREATE(CRightView)
 
 protected:
-	CBottomFormView();           // 动态创建所使用的受保护的构造函数
-	virtual ~CBottomFormView();
+	CRightView();           // 动态创建所使用的受保护的构造函数
+	virtual ~CRightView();
 
 public:
-	enum { IDD = IDD_BOTTOMFORMVIEW };
+	enum { IDD = IDD_RIGHTVIEW };
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 #ifndef _WIN32_WCE

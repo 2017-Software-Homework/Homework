@@ -7,8 +7,8 @@
 #define IDR_MAINFRAME                   128
 #define IDR_MFCprojectTYPE              130
 #define IDD_TOPFORMVIEW                 310
-#define IDD_DIALOG2                     311
-#define IDD_BOTTOMFORMVIEW              311
+#define IDD_LEFTVIEW                    310
+#define IDD_RIGHTVIEW                   311
 
 // Next default values for new objects
 // 

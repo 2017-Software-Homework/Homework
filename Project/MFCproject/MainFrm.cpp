@@ -7,9 +7,8 @@
 
 #include "MainFrm.h"
 
-
-#include "TopFormView.h"
-#include "BottomFormView.h"
+#include "LeftView.h"
+#include "RightView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -72,10 +71,10 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs,CCreateContext*pContext)
     if (bFlag)    
     {    
         CSize sz(100, 100);    
-        m_splitWnd.CreateView(0, 0, RUNTIME_CLASS(CTopFormView), sz, pContext);    
-        m_splitWnd.CreateView(1, 0, RUNTIME_CLASS(CBottomFormView), sz, pContext);    
-    }    
-    return bFlag;  
+        m_splitWnd.CreateView(0, 0, RUNTIME_CLASS(CLeftView), sz, pContext);    
+        m_splitWnd.CreateView(1, 0, RUNTIME_CLASS(CRightView), sz, pContext);    
+    } 
+    return bFlag;
 }
 
 // CMainFrame ’Ô∂œ
