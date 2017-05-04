@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "MFCproject.h"
 #include "LeftView.h"
-
+#include <math.h>
 
 // CLeftView
 
@@ -12,7 +12,11 @@ IMPLEMENT_DYNCREATE(CLeftView, CView)
 
 CLeftView::CLeftView()
 {
-
+	zoom = 1.0;
+	m_startX = 0;
+	m_startY = 0;
+	m_bmstartX = 0;
+	m_bmStartY = 0;
 }
 
 CLeftView::~CLeftView()
@@ -22,6 +26,9 @@ CLeftView::~CLeftView()
 BEGIN_MESSAGE_MAP(CLeftView, CView)
 	ON_COMMAND(ID_FILE_OPEN, &CLeftView::OnFileOpen)
 	ON_COMMAND(ID_FILE_OPEN, &CLeftView::OnFileOpen)
+	ON_WM_MOUSEWHEEL()
+	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
 
@@ -58,7 +65,12 @@ void CLeftView::Dump(CDumpContext& dc) const
 
 
 // CLeftView 消息处理程序
-
+int CLeftView::distance(CPoint p1,CPoint p2)
+{
+	double d1 = p1.x - p2.x;
+	double d2 = p1.y - p2.y;
+	return int(sqrt(d1 * d1 + d2 * d2));
+}
 
 
 
@@ -76,8 +88,7 @@ void CLeftView::ShowBitmap(CString BmpName,CDC *pDC)
 	CRect rect;
 	GetClientRect(&rect);
 
-	int m_showX = 0;
-	int m_showY = 0;
+	
 	int m_nWindowWidth = rect.right - rect.left;
 	int m_nWindowHeight = rect.bottom - rect.top;
 
@@ -97,7 +108,7 @@ void CLeftView::ShowBitmap(CString BmpName,CDC *pDC)
 	percentage2 = double(m_nWindowHeight) / double(m_bmp.bmHeight);
 	percentage = percentage1 > percentage2 ? percentage2 : percentage1;
 
-	pDC->StretchBlt(0,0,int (m_bmp.bmWidth * percentage) ,int (m_bmp.bmHeight * percentage),&dcBmp,0,0,m_bmp.bmWidth,m_bmp.bmHeight,SRCCOPY);
+	pDC->StretchBlt(m_startX,m_startY,int (m_bmp.bmWidth * percentage * zoom) ,int (m_bmp.bmHeight * percentage * zoom),&dcBmp,m_bmstartX,m_bmStartY,m_bmp.bmWidth,m_bmp.bmHeight,SRCCOPY);
 	dcBmp.SelectObject(pbmpOld);
 	DeleteObject(&m_bitmap);
 	dcBmp.DeleteDC();
@@ -119,4 +130,46 @@ void CLeftView::OnFileOpen()
 	}
 	// TODO: 在此添加命令处理程序代码
 }
+
+
+
+BOOL CLeftView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CRect Rect;
+	GetWindowRect(Rect);
+	CPoint p;
+	p.x = pt.x - Rect.left;
+	p.y = pt.y - Rect.top;
+	if (zoom <= 20 && zoom > 0.1)
+		zoom *= (1.0 + double(zDelta) / 2400);
+	m_startX = p.x - double(p.x - m_startX) * (1.0 + double(zDelta) / 2400);
+	m_startY = p.y - double(p.y - m_startY) * (1.0 + double(zDelta) / 2400);
+	Invalidate();
+	return TRUE;
+}
+
+
+
+void CLeftView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	lkeydown = point;
+	CView::OnLButtonDown(nFlags, point);
+}
+
+
+void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	lkeyup = point;
+	if (distance(lkeyup,lkeydown) > 10)
+	{
+		m_startX += (lkeyup.x - lkeydown.x);
+		m_startY += (lkeyup.y - lkeydown.y);
+	}
+	Invalidate();
+	CView::OnLButtonUp(nFlags, point);
+}
+
 

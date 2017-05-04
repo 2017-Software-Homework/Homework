@@ -33,7 +33,6 @@ END_MESSAGE_MAP()
 CMFCprojectView::CMFCprojectView()
 {
 	// TODO: 在此处添加构造代码
-
 }
 
 CMFCprojectView::~CMFCprojectView()
