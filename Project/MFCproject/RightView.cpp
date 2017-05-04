@@ -12,7 +12,9 @@ IMPLEMENT_DYNCREATE(CRightView, CView)
 
 CRightView::CRightView()
 {
-
+	point_pos.x = 0;
+	point_pos.y = 0;
+	red = green = blue = 0;
 }
 
 CRightView::~CRightView()

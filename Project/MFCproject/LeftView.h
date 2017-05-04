@@ -1,18 +1,14 @@
 #pragma once
 
-
+#include "RightView.h"
 // CLeftView йсм╪
 
-class CLeftView : public CView
+class CLeftView : public CRightView
 {
 	DECLARE_DYNCREATE(CLeftView)
 
 public:
-	int red;
-	int green;
-	int blue;
-	CPoint point_pos;
-	COLORREF color;
+	
 	double zoom;
 	int m_startX;
 	int m_startY;

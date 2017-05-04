@@ -17,9 +17,7 @@ CLeftView::CLeftView()
 	m_startY = 0;
 	m_bmstartX = 0;
 	m_bmStartY = 0;
-	point_pos.x = 0;
-	point_pos.y = 0;
-	red = green = blue = 0;
+	
 }
 
 CLeftView::~CLeftView()
@@ -174,11 +172,10 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 		GetWindowRect(Rect);
 		HDC hDC = ::GetDC(NULL);
 		color = ::GetPixel(hDC,lkeydown.x + Rect.left,lkeydown.y + Rect.top);
-		int red = GetRValue(color);  
-		int green = GetGValue(color);  
-		int blue = GetBValue(color); 
+		red = GetRValue(color);  
+		green = GetGValue(color);  
+		blue = GetBValue(color); 
 		point_pos = lkeydown;
-
 	}
 	Invalidate();
 	CView::OnLButtonUp(nFlags, point);

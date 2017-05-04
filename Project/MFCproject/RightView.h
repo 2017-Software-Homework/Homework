@@ -7,6 +7,14 @@ class CRightView : public CView
 {
 	DECLARE_DYNCREATE(CRightView)
 
+
+public:
+	int red;
+	int green;
+	int blue;
+	CPoint point_pos;
+	COLORREF color;
+
 protected:
 	CRightView();           // 动态创建所使用的受保护的构造函数
 	virtual ~CRightView();
