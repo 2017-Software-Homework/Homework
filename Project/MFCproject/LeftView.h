@@ -8,6 +8,11 @@ class CLeftView : public CView
 	DECLARE_DYNCREATE(CLeftView)
 
 public:
+	int red;
+	int green;
+	int blue;
+	CPoint point_pos;
+	COLORREF color;
 	double zoom;
 	int m_startX;
 	int m_startY;

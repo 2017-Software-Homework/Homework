@@ -17,6 +17,9 @@ CLeftView::CLeftView()
 	m_startY = 0;
 	m_bmstartX = 0;
 	m_bmStartY = 0;
+	point_pos.x = 0;
+	point_pos.y = 0;
+	red = green = blue = 0;
 }
 
 CLeftView::~CLeftView()
@@ -36,9 +39,6 @@ END_MESSAGE_MAP()
 
 void CLeftView::OnDraw(CDC* pDC)
 {
-	
-
-
 	if (extname.Compare(_T("bmp")) == 0)
 	{
 		ShowBitmap(BmpName,pDC);
@@ -163,10 +163,22 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	lkeyup = point;
-	if (distance(lkeyup,lkeydown) > 10)
+	if (distance(lkeyup,lkeydown) > 8)
 	{
 		m_startX += (lkeyup.x - lkeydown.x);
 		m_startY += (lkeyup.y - lkeydown.y);
+	}
+	else
+	{
+		CRect Rect;
+		GetWindowRect(Rect);
+		HDC hDC = ::GetDC(NULL);
+		color = ::GetPixel(hDC,lkeydown.x + Rect.left,lkeydown.y + Rect.top);
+		int red = GetRValue(color);  
+		int green = GetGValue(color);  
+		int blue = GetBValue(color); 
+		point_pos = lkeydown;
+
 	}
 	Invalidate();
 	CView::OnLButtonUp(nFlags, point);
