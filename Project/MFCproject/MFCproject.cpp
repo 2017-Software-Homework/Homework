@@ -160,6 +160,7 @@ protected:
 // й╣ож
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(CAboutDlg::IDD)

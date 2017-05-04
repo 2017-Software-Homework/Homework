@@ -22,6 +22,7 @@ CRightView::~CRightView()
 }
 
 BEGIN_MESSAGE_MAP(CRightView, CView)
+	ON_COMMAND(ID_EDIT_REFRESH, &CRightView::OnEditRefresh)
 END_MESSAGE_MAP()
 
 
@@ -30,10 +31,23 @@ END_MESSAGE_MAP()
 void CRightView::OnDraw(CDC* pDC)
 {
 	CDocument* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+	ShowTheColor(pDC);
 	// TODO: 在此添加绘制代码
 }
 
-
+void CRightView::ShowTheColor(CDC *pDC)
+{
+	CString s_red,s_green,s_blue;
+	s_red.Format(_T("R值为:%d"),red);
+	s_green.Format(_T("G值为:%d"),green);
+	s_blue.Format(_T("B值为:%d"),blue);
+	pDC->TextOutW(0,0,s_red);
+	pDC->TextOutW(0,20,s_green);
+	pDC->TextOutW(0,40,s_blue);
+}
 // CRightView 诊断
 
 #ifdef _DEBUG
@@ -52,3 +66,10 @@ void CRightView::Dump(CDumpContext& dc) const
 
 
 // CRightView 消息处理程序
+
+
+void CRightView::OnEditRefresh()
+{
+	// TODO: 在此添加命令处理程序代码
+	UpdateWindow();
+}

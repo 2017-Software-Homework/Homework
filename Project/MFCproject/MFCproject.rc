@@ -123,11 +123,24 @@ BEGIN
     END
     POPUP "±à¼­(&E)"
     BEGIN
+        MENUITEM "Ë¢ÐÂ",                          ID_EDIT_REFRESH
         MENUITEM "³·Ïû(&U)\tCtrl+Z",              ID_EDIT_UNDO
         MENUITEM SEPARATOR
         MENUITEM "¼ôÇÐ(&T)\tCtrl+X",              ID_EDIT_CUT
         MENUITEM "¸´ÖÆ(&C)\tCtrl+C",              ID_EDIT_COPY
         MENUITEM "Õ³Ìù(&P)\tCtrl+V",              ID_EDIT_PASTE
+    END
+    POPUP "Ñ¡Ôñ·¶Î§"
+    BEGIN
+        MENUITEM "µã",                           ID_CHOOSE_POINT
+        MENUITEM "¾ØÐÎ",                          ID_CHOOSE_RECT
+        MENUITEM "Ô²",                           ID_CHOOSE_CIRCLE
+    END
+    POPUP "Âß¼­ÔËËã"
+    BEGIN
+        MENUITEM "½»",                           ID_AND
+        MENUITEM "²¢",                           ID_OR
+        MENUITEM "²î",                           ID_MINUS
     END
     POPUP "ÊÓÍ¼(&V)"
     BEGIN

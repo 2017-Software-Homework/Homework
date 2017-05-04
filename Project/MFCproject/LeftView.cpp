@@ -12,6 +12,8 @@ IMPLEMENT_DYNCREATE(CLeftView, CView)
 
 CLeftView::CLeftView()
 {
+	operation = 1;
+	choose_status = 1;
 	zoom = 1.0;
 	m_startX = 0;
 	m_startY = 0;
@@ -30,6 +32,19 @@ BEGIN_MESSAGE_MAP(CLeftView, CView)
 	ON_WM_MOUSEWHEEL()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
+	ON_COMMAND(ID_EDIT_REFRESH, &CLeftView::OnEditRefresh)
+	ON_COMMAND(ID_CHOOSE_POINT, &CLeftView::OnChoosePoint)
+	ON_COMMAND(ID_CHOOSE_CIRCLE, &CLeftView::OnChooseCircle)
+	ON_COMMAND(ID_CHOOSE_RECT, &CLeftView::OnChooseRect)
+	ON_UPDATE_COMMAND_UI(ID_CHOOSE_POINT, &CLeftView::OnUpdateChoosePoint)
+	ON_UPDATE_COMMAND_UI(ID_CHOOSE_RECT, &CLeftView::OnUpdateChooseRect)
+	ON_UPDATE_COMMAND_UI(ID_CHOOSE_CIRCLE, &CLeftView::OnUpdateChooseCircle)
+	ON_COMMAND(ID_AND, &CLeftView::OnAnd)
+	ON_COMMAND(ID_OR, &CLeftView::OnOr)
+	ON_COMMAND(ID_MINUS, &CLeftView::OnMinus)
+	ON_UPDATE_COMMAND_UI(ID_AND, &CLeftView::OnUpdateAnd)
+	ON_UPDATE_COMMAND_UI(ID_OR, &CLeftView::OnUpdateOr)
+	ON_UPDATE_COMMAND_UI(ID_MINUS, &CLeftView::OnUpdateMinus)
 END_MESSAGE_MAP()
 
 
@@ -37,6 +52,10 @@ END_MESSAGE_MAP()
 
 void CLeftView::OnDraw(CDC* pDC)
 {
+	CDocument* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
 	if (extname.Compare(_T("bmp")) == 0)
 	{
 		ShowBitmap(BmpName,pDC);
@@ -182,3 +201,94 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 }
 
 
+
+
+void CLeftView::OnEditRefresh()
+{
+	// TODO: 在此添加命令处理程序代码
+	Invalidate();
+}
+
+
+void CLeftView::OnChoosePoint()
+{
+	// TODO: 在此添加命令处理程序代码
+	choose_status = 1;
+}
+
+
+void CLeftView::OnChooseCircle()
+{
+	// TODO: 在此添加命令处理程序代码
+	choose_status = 3;
+}
+
+
+void CLeftView::OnChooseRect()
+{
+	// TODO: 在此添加命令处理程序代码
+	choose_status = 2;
+}
+
+
+void CLeftView::OnUpdateChoosePoint(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(choose_status == 1);
+}
+
+
+void CLeftView::OnUpdateChooseRect(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(choose_status == 2);
+}
+
+
+void CLeftView::OnUpdateChooseCircle(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(choose_status == 3);
+}
+
+
+void CLeftView::OnAnd()
+{
+	// TODO: 在此添加命令处理程序代码
+	operation = 1;
+}
+
+
+void CLeftView::OnOr()
+{
+	// TODO: 在此添加命令处理程序代码
+	operation = 2;
+}
+
+
+void CLeftView::OnMinus()
+{
+	// TODO: 在此添加命令处理程序代码
+	operation  = 3;
+}
+
+
+void CLeftView::OnUpdateAnd(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(operation == 1);
+}
+
+
+void CLeftView::OnUpdateOr(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(operation == 2);
+}
+
+
+void CLeftView::OnUpdateMinus(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(operation == 3);
+}

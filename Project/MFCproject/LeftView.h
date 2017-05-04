@@ -8,7 +8,7 @@ class CLeftView : public CRightView
 	DECLARE_DYNCREATE(CLeftView)
 
 public:
-	
+	int choose_status,operation;
 	double zoom;
 	int m_startX;
 	int m_startY;
@@ -42,6 +42,19 @@ public:
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnEditRefresh();
+	afx_msg void OnChoosePoint();
+	afx_msg void OnChooseCircle();
+	afx_msg void OnChooseRect();
+	afx_msg void OnUpdateChoosePoint(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateChooseRect(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateChooseCircle(CCmdUI *pCmdUI);
+	afx_msg void OnAnd();
+	afx_msg void OnOr();
+	afx_msg void OnMinus();
+	afx_msg void OnUpdateAnd(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateOr(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateMinus(CCmdUI *pCmdUI);
 };
 
 

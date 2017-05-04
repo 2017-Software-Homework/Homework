@@ -33,6 +33,8 @@ END_MESSAGE_MAP()
 CMFCprojectView::CMFCprojectView()
 {
 	// TODO: 在此处添加构造代码
+	/*CMenu* menu = GetMenu()->GetSubMenu(2);
+	menu->CheckMenuRadioItem(ID_CHOOSE_POINT,ID_CHOOSE_CIRCLE, ID_CHOOSE_POINT,MF_BYCOMMAND);*/
 }
 
 CMFCprojectView::~CMFCprojectView()

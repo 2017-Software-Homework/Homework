@@ -14,6 +14,7 @@ public:
 	int blue;
 	CPoint point_pos;
 	COLORREF color;
+	void ShowTheColor(CDC *pDC);
 
 protected:
 	CRightView();           // 动态创建所使用的受保护的构造函数
@@ -30,6 +31,8 @@ public:
 
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnEditRefresh();
 };
 
 
