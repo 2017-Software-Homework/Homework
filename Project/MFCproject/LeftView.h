@@ -8,12 +8,10 @@ class CLeftView : public CView
 	DECLARE_DYNCREATE(CLeftView)
 
 public:
-	int state;
 	CString BmpName;
 	CString extname;
 	CBitmap m_bitmap;
-	void ShowBitmap(CString BmpName);
-	BOOL ShowJpgGif(CDC* pDC,CString strPath,int x,int y);
+	void ShowBitmap(CString BmpName,CDC *pDC);
 
 protected:
 	CLeftView();           // 动态创建所使用的受保护的构造函数

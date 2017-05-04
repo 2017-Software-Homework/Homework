@@ -12,7 +12,7 @@ IMPLEMENT_DYNCREATE(CLeftView, CView)
 
 CLeftView::CLeftView()
 {
-	state = 0;
+
 }
 
 CLeftView::~CLeftView()
@@ -20,6 +20,7 @@ CLeftView::~CLeftView()
 }
 
 BEGIN_MESSAGE_MAP(CLeftView, CView)
+	ON_COMMAND(ID_FILE_OPEN, &CLeftView::OnFileOpen)
 	ON_COMMAND(ID_FILE_OPEN, &CLeftView::OnFileOpen)
 END_MESSAGE_MAP()
 
@@ -29,6 +30,12 @@ END_MESSAGE_MAP()
 void CLeftView::OnDraw(CDC* pDC)
 {
 	
+
+
+	if (extname.Compare(_T("bmp")) == 0)
+	{
+		ShowBitmap(BmpName,pDC);
+	}
 	// TODO: 在此添加绘制代码
 }
 
@@ -53,46 +60,63 @@ void CLeftView::Dump(CDumpContext& dc) const
 // CLeftView 消息处理程序
 
 
+
+
+void CLeftView::ShowBitmap(CString BmpName,CDC *pDC)
+{
+	
+	HBITMAP m_hBitmap = (HBITMAP)LoadImage(NULL,BmpName,IMAGE_BITMAP,0,0,LR_CREATEDIBSECTION | LR_DEFAULTSIZE | LR_LOADFROMFILE);	
+		
+	if (m_bitmap.m_hObject)
+	{
+		m_bitmap.Detach();
+	}
+	m_bitmap.Attach(m_hBitmap);
+
+	CRect rect;
+	GetClientRect(&rect);
+
+	int m_showX = 0;
+	int m_showY = 0;
+	int m_nWindowWidth = rect.right - rect.left;
+	int m_nWindowHeight = rect.bottom - rect.top;
+
+	CDC dcBmp;
+	if(!dcBmp.CreateCompatibleDC(pDC))
+		return;
+
+	
+	BITMAP m_bmp;
+	m_bitmap.GetBitmap(&m_bmp);
+
+	CBitmap *pbmpOld = NULL;
+	dcBmp.SelectObject(&m_bitmap);
+	
+	double percentage,percentage1,percentage2;
+	percentage1 = double (m_nWindowWidth) / double(m_bmp.bmWidth);
+	percentage2 = double(m_nWindowHeight) / double(m_bmp.bmHeight);
+	percentage = percentage1 > percentage2 ? percentage2 : percentage1;
+
+	pDC->StretchBlt(0,0,int (m_bmp.bmWidth * percentage) ,int (m_bmp.bmHeight * percentage),&dcBmp,0,0,m_bmp.bmWidth,m_bmp.bmHeight,SRCCOPY);
+	dcBmp.SelectObject(pbmpOld);
+	DeleteObject(&m_bitmap);
+	dcBmp.DeleteDC();
+//	Invalidate();
+	
+}
+
 void CLeftView::OnFileOpen()
 {
-	CFileDialog dlg(TRUE,NULL,NULL,OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT,_T("位图文件(*.BMP)|*.BMP|jpg文件(*.jpg)|*.jpg||"));
+	CString filter;  
+    filter="所有文件(*.bmp,*.jpg,*.gif,*tiff)|*.bmp;*.jpg;*.gif;*.tiff| BMP(*.bmp)|*.bmp| JPG(*.jpg)|*.jpg| GIF(*.gif)|*.gif| TIFF(*.tiff)|*.tiff||";  
+    CFileDialog dlg(TRUE,NULL,NULL,OFN_HIDEREADONLY,filter,NULL);
 	if (IDOK == dlg.DoModal())
 	{
-		state = 0;
 		BmpName.Format(_T("%s"),dlg.GetPathName());
 		extname = dlg.GetFileExt();
 		extname.MakeLower();
-
-		if (!extname.Compare(_T("bmp")))
-		{
-			ShowBitmap(BmpName);
-		}
-		else
-		{
-			state  = 1;
-		}
 		Invalidate();
 	}
 	// TODO: 在此添加命令处理程序代码
 }
 
-void CLeftView::ShowBitmap(CString BmpName)
-{
-	if (state == 0)
-	{
-		HBITMAP hBitmap = (HBITMAP)LoadImage(NULL,BmpName,IMAGE_BITMAP,0,0,LR_CREATEDIBSECTION | LR_DEFAULTSIZE | LR_LOADFROMFILE);
-		m_bitmap.Detach();
-		m_bitmap.Attach(hBitmap);
-		state = 1;
-		Invalidate();
-	}
-}
-
-BOOL CLeftView::ShowJpgGif(CDC* pDC,CString strPath,int x,int y)
-{
-	IStream *pStm;
-	CFileStatus fstatus;
-	CFile file;
-	LONG cb;
-	return true;
-}
