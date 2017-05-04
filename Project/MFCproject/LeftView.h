@@ -3,13 +3,49 @@
 #include "RightView.h"
 // CLeftView йсм╪
 
+struct point_array
+{
+	int operation;
+	int count_num;
+	CPoint point;
+
+	point_array* next;
+};
+
+struct rect_array
+{
+
+	int operation;
+	int count_num;
+	CPoint point1;
+	CPoint point2;
+
+	rect_array* next;
+};
+
+struct circle_array
+{
+	int operation;
+	int count_num;
+	CPoint central;
+	int radius;
+
+	circle_array* next;
+
+};
+
+
 class CLeftView : public CRightView
 {
 	DECLARE_DYNCREATE(CLeftView)
 
 public:
-	int choose_status,operation;
+	point_array *point_head,*point_temp1,*point_temp2;
+	rect_array *rect_head,*rect_temp1,*rect_temp2;
+	circle_array *circle_head,*circle_temp1,*circle_temp2;
+	int choose_status,operation,choose_rect,choose_circle;
 	double zoom;
+	int count;
 	int m_startX;
 	int m_startY;
 	int m_bmstartX;

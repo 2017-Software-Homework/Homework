@@ -19,7 +19,15 @@ CLeftView::CLeftView()
 	m_startY = 0;
 	m_bmstartX = 0;
 	m_bmStartY = 0;
-	
+
+	choose_rect = 1;
+	choose_circle = 1;
+
+	count = 1;
+
+	point_head = point_temp1 = point_temp2 = NULL;
+	rect_head = rect_temp1 = rect_temp2 = NULL;
+	circle_head = circle_temp1 = circle_temp2 = NULL;
 }
 
 CLeftView::~CLeftView()
@@ -180,21 +188,126 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	lkeyup = point;
-	if (distance(lkeyup,lkeydown) > 8)
+	if (distance(lkeyup,lkeydown) >= 5)
 	{
 		m_startX += (lkeyup.x - lkeydown.x);
 		m_startY += (lkeyup.y - lkeydown.y);
 	}
 	else
 	{
-		CRect Rect;
-		GetWindowRect(Rect);
-		HDC hDC = ::GetDC(NULL);
-		color = ::GetPixel(hDC,lkeydown.x + Rect.left,lkeydown.y + Rect.top);
-		red = GetRValue(color);  
-		green = GetGValue(color);  
-		blue = GetBValue(color); 
-		point_pos = lkeydown;
+		if(choose_status == 1)
+		{
+			CRect Rect;
+			GetWindowRect(Rect);
+			HDC hDC = ::GetDC(NULL);
+			color = ::GetPixel(hDC,lkeydown.x + Rect.left,lkeydown.y + Rect.top);
+			red = GetRValue(color);  
+			green = GetGValue(color);  
+			blue = GetBValue(color); 
+			point_pos = lkeydown;
+
+			if (point_head == NULL)
+			{
+				point_head = new point_array;
+				point_head->operation = operation;
+				point_head->count_num = count;
+				point_head->point = lkeydown;
+				point_head->next = NULL;
+				point_temp2 = point_head;
+				count++;
+			}
+			else
+			{
+				point_temp1 = new point_array;
+				point_temp1->operation = operation;
+				point_temp1->point = lkeydown;
+				point_temp1->count_num = count;
+				point_temp1->next = NULL;
+				point_temp2->next = point_temp1;
+				point_temp2 = point_temp1;
+				count++;
+			}
+
+		}
+		if (choose_status == 2)
+		{
+			if (choose_rect == 1)
+			{
+				if (rect_head == NULL)
+				{
+					rect_head = new rect_array;
+					rect_head->operation = operation;
+					rect_head->point1 = lkeydown;
+					rect_head->count_num = count;
+					rect_head->next = NULL;
+					rect_temp2 = rect_head;
+				}
+				else
+				{
+					rect_temp1 = new rect_array;
+					rect_temp1->operation = operation;
+					rect_temp1->point1 = lkeydown;
+					rect_temp1->count_num = count;
+					rect_temp1->next = NULL;
+					rect_temp2->next = rect_temp1;
+					rect_temp2 = rect_temp1;
+				}
+				choose_rect = 2;
+			}
+			else
+			{
+				if (rect_head->next == NULL)
+				{
+					rect_head->point2 = lkeydown;
+				}
+				else
+				{
+					rect_temp2->point2 = lkeydown;
+				}
+				choose_rect = 1;
+				count++;
+			}
+
+		}
+		if (choose_status == 3)
+		{
+			if (choose_circle == 1)
+			{
+				if (circle_head == NULL)
+				{
+					circle_head = new circle_array;
+					circle_head->operation = operation;
+					circle_head->central = lkeydown;
+					circle_head->count_num = count;
+					circle_head->next = NULL;
+					circle_temp2 = circle_head;
+				}
+				else
+				{
+					circle_temp1 = new circle_array;
+					circle_temp1->operation = operation;
+					circle_temp1->central = lkeydown;
+					circle_temp1->count_num = count;
+					circle_temp1->next = NULL;
+					circle_temp2->next = circle_temp1;
+					circle_temp2 = circle_temp1;
+				}
+				choose_circle = 2;
+			}
+			else
+			{
+				if (circle_head->next == NULL)
+				{
+					circle_head->radius = distance(lkeydown,circle_head->central);
+				}
+				else
+				{
+					circle_temp2->radius = distance(lkeydown,circle_temp2->central);
+				}
+				choose_circle = 1;
+				count++;
+			}
+		}
 	}
 	Invalidate();
 	CView::OnLButtonUp(nFlags, point);
