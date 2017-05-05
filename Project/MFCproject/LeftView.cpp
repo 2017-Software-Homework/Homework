@@ -14,6 +14,7 @@ CLeftView::CLeftView()
 {
 	operation = 1;
 	choose_status = 1;
+	load_status = 0;
 	zoom = 1.0;
 	m_startX = 0;
 	m_startY = 0;
@@ -64,10 +65,13 @@ void CLeftView::OnDraw(CDC* pDC)
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
+	
 	if (extname.Compare(_T("bmp")) == 0)
 	{
 		ShowBitmap(BmpName,pDC);
 	}
+	if(load_status == 1)
+		ShowInformation(pDC);
 	// TODO: 在此添加绘制代码
 }
 
@@ -137,8 +141,54 @@ void CLeftView::ShowBitmap(CString BmpName,CDC *pDC)
 	dcBmp.SelectObject(pbmpOld);
 	DeleteObject(&m_bitmap);
 	dcBmp.DeleteDC();
+	load_status = 1;
 //	Invalidate();
 	
+}
+
+void CLeftView::ShowInformation(CDC *pDC)
+{
+	CString s1,s2,s3,s4,s5;
+	CString S1,S2,S3;
+	s1.Format(_T("请选择点"));
+	s2.Format(_T("请选择矩形的第一个点"));
+	s3.Format(_T("请选择矩形的第二个点"));
+	s4.Format(_T("请选择圆心"));
+	s5.Format(_T("请选择圆周上一点"));
+	S1.Format(_T("目前所作运算:交"));
+	S2.Format(_T("目前所作运算:并"));
+	S3.Format(_T("目前所作运算:差"));
+	if (choose_status == 1)
+	{
+		pDC->TextOutW(0,0,s1);
+	}
+	if(choose_status == 2)
+	{
+		if(choose_rect == 1)
+			pDC->TextOutW(0,0,s2);
+		else
+			pDC->TextOutW(0,0,s3);
+	}
+	if(choose_status == 3)
+	{
+		if(choose_circle == 1)
+			pDC->TextOutW(0,0,s4);
+		else
+			pDC->TextOutW(0,0,s5);
+	}
+	if(operation == 1)
+	{
+		pDC->TextOutW(0,20,S1);
+	}
+	if(operation == 2)
+	{
+		pDC->TextOutW(0,20,S2);
+
+	}
+	if(operation == 3)
+	{
+		pDC->TextOutW(0,20,S3);
+	}
 }
 
 void CLeftView::OnFileOpen()
@@ -314,8 +364,6 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 }
 
 
-
-
 void CLeftView::OnEditRefresh()
 {
 	// TODO: 在此添加命令处理程序代码
@@ -327,13 +375,7 @@ void CLeftView::OnChoosePoint()
 {
 	// TODO: 在此添加命令处理程序代码
 	choose_status = 1;
-}
-
-
-void CLeftView::OnChooseCircle()
-{
-	// TODO: 在此添加命令处理程序代码
-	choose_status = 3;
+	Invalidate();
 }
 
 
@@ -341,8 +383,15 @@ void CLeftView::OnChooseRect()
 {
 	// TODO: 在此添加命令处理程序代码
 	choose_status = 2;
+	Invalidate();
 }
 
+void CLeftView::OnChooseCircle()
+{
+	// TODO: 在此添加命令处理程序代码
+	choose_status = 3;
+	Invalidate();
+}
 
 void CLeftView::OnUpdateChoosePoint(CCmdUI *pCmdUI)
 {
@@ -369,6 +418,7 @@ void CLeftView::OnAnd()
 {
 	// TODO: 在此添加命令处理程序代码
 	operation = 1;
+	Invalidate();
 }
 
 
@@ -376,6 +426,7 @@ void CLeftView::OnOr()
 {
 	// TODO: 在此添加命令处理程序代码
 	operation = 2;
+	Invalidate();
 }
 
 
@@ -383,6 +434,7 @@ void CLeftView::OnMinus()
 {
 	// TODO: 在此添加命令处理程序代码
 	operation  = 3;
+	Invalidate();
 }
 
 

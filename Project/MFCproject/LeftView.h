@@ -43,7 +43,7 @@ public:
 	point_array *point_head,*point_temp1,*point_temp2;
 	rect_array *rect_head,*rect_temp1,*rect_temp2;
 	circle_array *circle_head,*circle_temp1,*circle_temp2;
-	int choose_status,operation,choose_rect,choose_circle;
+	int choose_status,operation,choose_rect,choose_circle,load_status;
 	double zoom;
 	int count;
 	int m_startX;
@@ -57,6 +57,7 @@ public:
 	CRect Rect;
 	CPoint lkeydown,lkeyup;
 	int distance(CPoint p1,CPoint p2);
+	void ShowInformation(CDC *pDC);
 
 protected:
 	CLeftView();           // 动态创建所使用的受保护的构造函数
