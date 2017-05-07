@@ -20,6 +20,7 @@ IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_WM_CREATE()
+//	ON_COMMAND(ID_SET_COLOR, &CMainFrame::OnSetColor)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -100,3 +101,9 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	return bFlag;
 	//return CFrameWnd::OnCreateClient(lpcs, pContext);
 }
+
+
+//void CMainFrame::OnSetColor()
+//{
+//	// TODO: 在此添加命令处理程序代码
+//}

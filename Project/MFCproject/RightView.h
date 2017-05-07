@@ -14,6 +14,7 @@ public:
 	int blue;
 	CPoint point_pos;
 	COLORREF color;
+	COLORREF changed_color;
 	void ShowTheColor(CDC *pDC);
 
 protected:

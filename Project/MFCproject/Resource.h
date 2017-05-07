@@ -8,6 +8,13 @@
 #define IDR_MFCprojectTYPE              130
 #define IDD_LEFTVIEW                    310
 #define IDD_RIGHTVIEW                   311
+#define IDD_SET_COLOR                   313
+#define IDD_DIALOG1                     316
+#define IDD_PROJECTDIALOG               316
+#define IDC_EDIT1                       1000
+#define IDC_EDIT2                       1001
+#define IDC_EDIT3                       1002
+#define IDC_MFCCOLORBUTTON2             1004
 #define ID_32771                        32771
 #define ID_32772                        32772
 #define ID_32773                        32773
@@ -21,14 +28,16 @@
 #define ID_OR                           32781
 #define ID_MINUS                        32782
 #define ID_EDIT_REFRESH                 32783
+#define ID_32784                        32784
+#define ID_SET_COLOR                    32785
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        313
-#define _APS_NEXT_COMMAND_VALUE         32784
-#define _APS_NEXT_CONTROL_VALUE         1000
+#define _APS_NEXT_RESOURCE_VALUE        317
+#define _APS_NEXT_COMMAND_VALUE         32786
+#define _APS_NEXT_CONTROL_VALUE         1005
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

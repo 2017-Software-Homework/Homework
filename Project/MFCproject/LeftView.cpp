@@ -5,6 +5,7 @@
 #include "MFCproject.h"
 #include "LeftView.h"
 #include <math.h>
+#include "ProjectDialog.h"
 
 // CLeftView
 
@@ -54,6 +55,8 @@ BEGIN_MESSAGE_MAP(CLeftView, CView)
 	ON_UPDATE_COMMAND_UI(ID_AND, &CLeftView::OnUpdateAnd)
 	ON_UPDATE_COMMAND_UI(ID_OR, &CLeftView::OnUpdateOr)
 	ON_UPDATE_COMMAND_UI(ID_MINUS, &CLeftView::OnUpdateMinus)
+//	ON_COMMAND(ID_SET_COLOR, &CLeftView::OnSetColor)
+ON_COMMAND(ID_SET_COLOR, &CLeftView::OnSetColor)
 END_MESSAGE_MAP()
 
 
@@ -207,7 +210,6 @@ void CLeftView::OnFileOpen()
 }
 
 
-
 BOOL CLeftView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
@@ -216,14 +218,31 @@ BOOL CLeftView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	CPoint p;
 	p.x = pt.x - Rect.left;
 	p.y = pt.y - Rect.top;
-	if (zoom <= 20 && zoom > 0.1)
+	if ((zoom <= 20 && zoom >= 0.1) || (zoom > 20 && zDelta < 0) || ( zoom < 0.1 && zDelta > 0))
 		zoom *= (1.0 + double(zDelta) / 2400);
-	m_startX = p.x - double(p.x - m_startX) * (1.0 + double(zDelta) / 2400);
-	m_startY = p.y - double(p.y - m_startY) * (1.0 + double(zDelta) / 2400);
+	m_startX = p.x - double(p.x - m_startX) * (1.0 + double(zDelta) / 2400.0);
+	m_startY = p.y - double(p.y - m_startY) * (1.0 + double(zDelta) / 2400.0);
+	for (point_temp1 = point_head;point_temp1 != NULL;point_temp1 = point_temp1->next)
+	{
+		point_temp1->point.x = p.x - double(p.x - point_temp1->point.x) * (1.0 + double(zDelta) / 2400.0);
+		point_temp1->point.y = p.y - double(p.y - point_temp1->point.y) * (1.0 + double(zDelta) / 2400.0);
+	}
+	for(rect_temp1 = rect_head;rect_temp1 != NULL;rect_temp1 = rect_temp1->next)
+	{
+		rect_temp1->point1.x = p.x - double(p.x - rect_temp1->point1.x) * (1.0 + double(zDelta) / 2400.0);
+		rect_temp1->point1.y = p.y - double(p.y - rect_temp1->point1.y) * (1.0 + double(zDelta) / 2400.0);
+		rect_temp1->point2.x = p.x - double(p.x - rect_temp1->point2.x) * (1.0 + double(zDelta) / 2400.0);
+		rect_temp1->point2.y = p.y - double(p.y - rect_temp1->point2.y) * (1.0 + double(zDelta) / 2400.0);
+	}
+	for (circle_temp1 = circle_head;circle_temp1 != NULL;circle_temp1 = circle_temp1->next)
+	{
+		circle_temp1->central.x = p.x - double(p.x - circle_temp1->central.x) * (1.0 + double(zDelta) / 2400.0);
+		circle_temp1->central.y = p.y - double(p.y - circle_temp1->central.y) * (1.0 + double(zDelta) / 2400.0);
+		circle_temp1->radius = circle_temp1->radius * (1.0 + double(zDelta) / 2400.0);
+	}
 	Invalidate();
 	return TRUE;
 }
-
 
 
 void CLeftView::OnLButtonDown(UINT nFlags, CPoint point)
@@ -242,6 +261,23 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 	{
 		m_startX += (lkeyup.x - lkeydown.x);
 		m_startY += (lkeyup.y - lkeydown.y);
+		for (point_temp1 = point_head;point_temp1 != NULL;point_temp1 = point_temp1->next)
+		{
+			point_temp1->point.x += (lkeyup.x - lkeydown.x);
+			point_temp1->point.y += (lkeyup.y - lkeydown.y);
+		}
+		for(rect_temp1 = rect_head;rect_temp1 != NULL;rect_temp1 = rect_temp1->next)
+		{
+			rect_temp1->point1.x += (lkeyup.x - lkeydown.x);
+			rect_temp1->point1.y += (lkeyup.y - lkeydown.y);
+			rect_temp1->point2.x += (lkeyup.x - lkeydown.x);
+			rect_temp1->point2.y += (lkeyup.y - lkeydown.y);
+		}
+		for (circle_temp1 = circle_head;circle_temp1 != NULL;circle_temp1 = circle_temp1->next)
+		{
+			circle_temp1->central.x += (lkeyup.x - lkeydown.x);
+			circle_temp1->central.y += (lkeyup.y - lkeydown.y);
+		}
 	}
 	else
 	{
@@ -397,6 +433,7 @@ void CLeftView::OnUpdateChoosePoint(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 	pCmdUI->SetCheck(choose_status == 1);
+	pCmdUI->Enable(!((choose_circle == 2) || (choose_rect == 2)));
 }
 
 
@@ -404,6 +441,7 @@ void CLeftView::OnUpdateChooseRect(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 	pCmdUI->SetCheck(choose_status == 2);
+	pCmdUI->Enable (!((choose_circle == 2) || (choose_rect == 2)));
 }
 
 
@@ -411,6 +449,7 @@ void CLeftView::OnUpdateChooseCircle(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 	pCmdUI->SetCheck(choose_status == 3);
+	pCmdUI->Enable(!((choose_circle == 2) || (choose_rect == 2)));
 }
 
 
@@ -442,6 +481,7 @@ void CLeftView::OnUpdateAnd(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 	pCmdUI->SetCheck(operation == 1);
+	pCmdUI->Enable(!((choose_circle == 2) || (choose_rect == 2)));
 }
 
 
@@ -449,6 +489,7 @@ void CLeftView::OnUpdateOr(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 	pCmdUI->SetCheck(operation == 2);
+	pCmdUI->Enable(!((choose_circle == 2) || (choose_rect == 2)));
 }
 
 
@@ -456,4 +497,15 @@ void CLeftView::OnUpdateMinus(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 	pCmdUI->SetCheck(operation == 3);
+	pCmdUI->Enable(!((choose_circle == 2) || (choose_rect == 2)));
+}
+
+
+
+void CLeftView::OnSetColor()
+{
+	// TODO: 在此添加命令处理程序代码
+	ProjectDialog td;
+	td.Create(IDD_SET_COLOR);
+	td.ShowWindow(SW_SHOWNORMAL);
 }

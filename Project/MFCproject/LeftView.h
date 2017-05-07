@@ -92,6 +92,7 @@ public:
 	afx_msg void OnUpdateAnd(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateOr(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateMinus(CCmdUI *pCmdUI);
+	afx_msg void OnSetColor();
 };
 
 

@@ -71,5 +71,5 @@ void CRightView::Dump(CDumpContext& dc) const
 void CRightView::OnEditRefresh()
 {
 	// TODO: 在此添加命令处理程序代码
-	UpdateWindow();
+	Invalidate();
 }

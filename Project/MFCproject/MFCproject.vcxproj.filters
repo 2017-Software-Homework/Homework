@@ -45,6 +45,9 @@
     <ClInclude Include="RightView.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ProjectDialog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MFCproject.cpp">
@@ -66,6 +69,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="RightView.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectDialog.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
