@@ -287,8 +287,8 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 			GetWindowRect(Rect);
 			HDC hDC = ::GetDC(NULL);
 			color = ::GetPixel(hDC,lkeydown.x + Rect.left,lkeydown.y + Rect.top);
-			red = GetRValue(color);  
-			green = GetGValue(color);  
+			red = GetRValue(color);
+			green = GetGValue(color);
 			blue = GetBValue(color); 
 			point_pos = lkeydown;
 
@@ -505,7 +505,7 @@ void CLeftView::OnUpdateMinus(CCmdUI *pCmdUI)
 void CLeftView::OnSetColor()
 {
 	// TODO: 在此添加命令处理程序代码
-	ProjectDialog td;
-	td.Create(IDD_SET_COLOR);
-	td.ShowWindow(SW_SHOWNORMAL);
+	ProjectDialog *td=new ProjectDialog;
+	td->Create(IDD_SET_COLOR,this);
+	td->ShowWindow(SW_SHOW);	
 }

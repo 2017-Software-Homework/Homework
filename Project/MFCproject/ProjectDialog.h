@@ -12,7 +12,7 @@ public:
 	virtual ~ProjectDialog();
 
 // 对话框数据
-	enum { IDD = IDD_PROJECTDIALOG };
+	enum { IDD = IDD_SET_COLOR };
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
@@ -20,4 +20,5 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnSetColor();
+	afx_msg void OnBnClickedOk();
 };
