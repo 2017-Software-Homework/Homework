@@ -46,7 +46,7 @@ void ProjectDialog::OnSetColor()
 void ProjectDialog::OnBnClickedOk()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	//CDialog::OnOK();
+	
 	CEdit *pBox1,*pBox2,*pBox3;
 	pBox1 = (CEdit*) GetDlgItem(IDC_EDIT1);
 	pBox2 = (CEdit*) GetDlgItem(IDC_EDIT2);
@@ -67,27 +67,38 @@ void ProjectDialog::OnBnClickedOk()
 	}
 	if (g < 0 || g > 255)
 	{
-		wrong += 10;
+		wrong += 2;
 	}
 	if (b < 0 || b > 255)
 	{
-		wrong += 100;
+		wrong += 4;
 	}
 	
 	if (wrong == 0)
 	{
-		MessageBox(_T("R值为:") + str1 + _T("\nG值为:") + str2 + _T("\nB值为:") + str3,_T("程序运行结果"),MB_OK);//输出提示框,只用于测试,交作业时加注释
+		//MessageBox(_T("R值为:") + str1 + _T("\nG值为:") + str2 + _T("\nB值为:") + str3,_T("程序运行结果"),MB_OK);
+		//输出提示框,只用于测试,交作业时加注释
+		set_color[0] = r;
+		set_color[1] = g;
+		set_color[2] = b;
+		CDialog::OnOK();
+		change_color();
 	}
 	else
 	{
 		str_wrong = _T("");
-		if (wrong % 10 == 1)
+		if (wrong % 2 == 1)
 			str_wrong += _T("R值错误");
-		if ((wrong / 10) % 10 == 1)
+		if ((wrong / 2) % 2 == 1)
 			str_wrong += _T("G值错误");
-		if (wrong >= 100)
+		if (wrong >= 4)
 			str_wrong += _T("B值错误");
 		MessageBox(str_wrong,_T("错误提示"),MB_OK);
-	}
+	}	
+}
+
+
+void ProjectDialog::change_color()
+{
 
 }

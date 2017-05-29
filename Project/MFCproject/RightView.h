@@ -22,7 +22,7 @@ protected:
 	virtual ~CRightView();
 
 public:
-	virtual void OnDraw(CDC* pDC);      // 重写以绘制该视图
+	void OnDraw(CDC* pDC);      // 重写以绘制该视图
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 #ifndef _WIN32_WCE
@@ -34,6 +34,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnEditRefresh();
+//	virtual void OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/);
 };
 
 

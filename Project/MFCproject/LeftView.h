@@ -3,53 +3,34 @@
 #include "RightView.h"
 // CLeftView 视图
 
-struct point_array
+#define POINT 1
+#define RECT 2
+#define CIRCLE 3
+
+struct choose_array
 {
 	int operation;
-	int count_num;
-	CPoint point;
-
-	point_array* next;
-};
-
-struct rect_array
-{
-
-	int operation;
-	int count_num;
+	int choose;
 	CPoint point1;
 	CPoint point2;
-
-	rect_array* next;
-};
-
-struct circle_array
-{
-	int operation;
-	int count_num;
-	CPoint central;
 	int radius;
 
-	circle_array* next;
-
+	choose_array* next;
 };
-
 
 class CLeftView : public CRightView
 {
 	DECLARE_DYNCREATE(CLeftView)
 
 public:
-	point_array *point_head,*point_temp1,*point_temp2;
-	rect_array *rect_head,*rect_temp1,*rect_temp2;
-	circle_array *circle_head,*circle_temp1,*circle_temp2;
-	int choose_status,operation,choose_rect,choose_circle,load_status;
+	choose_array *choose_head,*choose_temp1,*choose_temp2;
+	int choose_status,operation,choose_rect,choose_circle,load_status,show_status;
 	double zoom;
 	int count;
 	int m_startX;
-	int m_startY;
+	int m_startY;//图片相对位置
 	int m_bmstartX;
-	int m_bmStartY;
+	int m_bmStartY;//没什么用
 	CString BmpName;
 	CString extname;
 	CBitmap m_bitmap;
@@ -93,6 +74,10 @@ public:
 	afx_msg void OnUpdateOr(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateMinus(CCmdUI *pCmdUI);
 	afx_msg void OnSetColor();
+	afx_msg void OnViewShow();
+	afx_msg void OnUpdateViewShow(CCmdUI *pCmdUI);
+	bool IsInChoose(CPoint p);
+	bool PointInRect(CPoint p,CPoint point1,CPoint point2);
 };
 
 

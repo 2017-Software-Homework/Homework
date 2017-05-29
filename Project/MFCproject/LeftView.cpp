@@ -16,6 +16,7 @@ CLeftView::CLeftView()
 	operation = 1;
 	choose_status = 1;
 	load_status = 0;
+	show_status = 0;
 	zoom = 1.0;
 	m_startX = 0;
 	m_startY = 0;
@@ -27,9 +28,7 @@ CLeftView::CLeftView()
 
 	count = 1;
 
-	point_head = point_temp1 = point_temp2 = NULL;
-	rect_head = rect_temp1 = rect_temp2 = NULL;
-	circle_head = circle_temp1 = circle_temp2 = NULL;
+	choose_head = choose_temp1 = choose_temp2 = NULL;
 }
 
 CLeftView::~CLeftView()
@@ -55,8 +54,9 @@ BEGIN_MESSAGE_MAP(CLeftView, CView)
 	ON_UPDATE_COMMAND_UI(ID_AND, &CLeftView::OnUpdateAnd)
 	ON_UPDATE_COMMAND_UI(ID_OR, &CLeftView::OnUpdateOr)
 	ON_UPDATE_COMMAND_UI(ID_MINUS, &CLeftView::OnUpdateMinus)
-//	ON_COMMAND(ID_SET_COLOR, &CLeftView::OnSetColor)
 ON_COMMAND(ID_SET_COLOR, &CLeftView::OnSetColor)
+ON_COMMAND(ID_VIEW_SHOW, &CLeftView::OnViewShow)
+ON_UPDATE_COMMAND_UI(ID_VIEW_SHOW, &CLeftView::OnUpdateViewShow)
 END_MESSAGE_MAP()
 
 
@@ -139,8 +139,29 @@ void CLeftView::ShowBitmap(CString BmpName,CDC *pDC)
 	percentage1 = double (m_nWindowWidth) / double(m_bmp.bmWidth);
 	percentage2 = double(m_nWindowHeight) / double(m_bmp.bmHeight);
 	percentage = percentage1 > percentage2 ? percentage2 : percentage1;
-
+	pDC->SetStretchBltMode(STRETCH_HALFTONE);//防止失真
 	pDC->StretchBlt(m_startX,m_startY,int (m_bmp.bmWidth * percentage * zoom) ,int (m_bmp.bmHeight * percentage * zoom),&dcBmp,m_bmstartX,m_bmStartY,m_bmp.bmWidth,m_bmp.bmHeight,SRCCOPY);
+	
+	if (show_status == 1)
+	{
+		int x,y;
+		CPoint temp;
+		for (x = 0;x <= int (m_bmp.bmWidth * percentage * zoom);x++)
+		{
+			for (y = 0;y <= int (m_bmp.bmHeight * percentage * zoom);y++)
+			{
+				temp.x = x + m_startX;
+				temp.y = y + m_startY;
+				if (!IsInChoose(temp))
+				{
+					pDC->SetPixel(temp,RGB(255,255,255));
+				
+				}
+			}
+	
+		}
+	}
+
 	dcBmp.SelectObject(pbmpOld);
 	DeleteObject(&m_bitmap);
 	dcBmp.DeleteDC();
@@ -222,23 +243,29 @@ BOOL CLeftView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 		zoom *= (1.0 + double(zDelta) / 2400);
 	m_startX = p.x - double(p.x - m_startX) * (1.0 + double(zDelta) / 2400.0);
 	m_startY = p.y - double(p.y - m_startY) * (1.0 + double(zDelta) / 2400.0);
-	for (point_temp1 = point_head;point_temp1 != NULL;point_temp1 = point_temp1->next)
+	for (choose_temp1 = choose_head;choose_temp1 != NULL;choose_temp1 = choose_temp1->next)
 	{
-		point_temp1->point.x = p.x - double(p.x - point_temp1->point.x) * (1.0 + double(zDelta) / 2400.0);
-		point_temp1->point.y = p.y - double(p.y - point_temp1->point.y) * (1.0 + double(zDelta) / 2400.0);
-	}
-	for(rect_temp1 = rect_head;rect_temp1 != NULL;rect_temp1 = rect_temp1->next)
-	{
-		rect_temp1->point1.x = p.x - double(p.x - rect_temp1->point1.x) * (1.0 + double(zDelta) / 2400.0);
-		rect_temp1->point1.y = p.y - double(p.y - rect_temp1->point1.y) * (1.0 + double(zDelta) / 2400.0);
-		rect_temp1->point2.x = p.x - double(p.x - rect_temp1->point2.x) * (1.0 + double(zDelta) / 2400.0);
-		rect_temp1->point2.y = p.y - double(p.y - rect_temp1->point2.y) * (1.0 + double(zDelta) / 2400.0);
-	}
-	for (circle_temp1 = circle_head;circle_temp1 != NULL;circle_temp1 = circle_temp1->next)
-	{
-		circle_temp1->central.x = p.x - double(p.x - circle_temp1->central.x) * (1.0 + double(zDelta) / 2400.0);
-		circle_temp1->central.y = p.y - double(p.y - circle_temp1->central.y) * (1.0 + double(zDelta) / 2400.0);
-		circle_temp1->radius = circle_temp1->radius * (1.0 + double(zDelta) / 2400.0);
+		if (choose_temp1->choose == 1)
+		{
+			choose_temp1->point1.x = p.x - double(p.x - choose_temp1->point1.x) * (1.0 + double(zDelta) / 2400.0);
+			choose_temp1->point1.y = p.y - double(p.y - choose_temp1->point1.y) * (1.0 + double(zDelta) / 2400.0);
+			continue;
+		}
+		if (choose_temp1->choose == 2)
+		{
+			choose_temp1->point1.x = p.x - double(p.x - choose_temp1->point1.x) * (1.0 + double(zDelta) / 2400.0);
+			choose_temp1->point1.y = p.y - double(p.y - choose_temp1->point1.y) * (1.0 + double(zDelta) / 2400.0);
+			choose_temp1->point2.x = p.x - double(p.x - choose_temp1->point2.x) * (1.0 + double(zDelta) / 2400.0);
+			choose_temp1->point2.y = p.y - double(p.y - choose_temp1->point2.y) * (1.0 + double(zDelta) / 2400.0);
+			continue;
+		}
+		if (choose_temp1->choose == 3)
+		{
+			choose_temp1->point1.x = p.x - double(p.x - choose_temp1->point1.x) * (1.0 + double(zDelta) / 2400.0);
+			choose_temp1->point1.y = p.y - double(p.y - choose_temp1->point1.y) * (1.0 + double(zDelta) / 2400.0);
+			choose_temp1->radius = choose_temp1->radius * (1.0 + double(zDelta) / 2400.0);
+			continue;
+		}
 	}
 	Invalidate();
 	return TRUE;
@@ -261,22 +288,22 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 	{
 		m_startX += (lkeyup.x - lkeydown.x);
 		m_startY += (lkeyup.y - lkeydown.y);
-		for (point_temp1 = point_head;point_temp1 != NULL;point_temp1 = point_temp1->next)
+		for (choose_temp1 = choose_head;choose_temp1 != NULL;choose_temp1 = choose_temp1->next)
 		{
-			point_temp1->point.x += (lkeyup.x - lkeydown.x);
-			point_temp1->point.y += (lkeyup.y - lkeydown.y);
-		}
-		for(rect_temp1 = rect_head;rect_temp1 != NULL;rect_temp1 = rect_temp1->next)
-		{
-			rect_temp1->point1.x += (lkeyup.x - lkeydown.x);
-			rect_temp1->point1.y += (lkeyup.y - lkeydown.y);
-			rect_temp1->point2.x += (lkeyup.x - lkeydown.x);
-			rect_temp1->point2.y += (lkeyup.y - lkeydown.y);
-		}
-		for (circle_temp1 = circle_head;circle_temp1 != NULL;circle_temp1 = circle_temp1->next)
-		{
-			circle_temp1->central.x += (lkeyup.x - lkeydown.x);
-			circle_temp1->central.y += (lkeyup.y - lkeydown.y);
+			if (choose_temp1->choose == 1 || choose_temp1->choose == 3)
+			{
+				choose_temp1->point1.x += (lkeyup.x - lkeydown.x);
+				choose_temp1->point1.y += (lkeyup.y - lkeydown.y);
+				continue;
+			}
+			if (choose_temp1->choose == 2)
+			{
+				choose_temp1->point1.x += (lkeyup.x - lkeydown.x);
+				choose_temp1->point1.y += (lkeyup.y - lkeydown.y);
+				choose_temp1->point2.x += (lkeyup.x - lkeydown.x);
+				choose_temp1->point2.y += (lkeyup.y - lkeydown.y);
+				continue;
+			}
 		}
 	}
 	else
@@ -291,107 +318,100 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 			green = GetGValue(color);
 			blue = GetBValue(color); 
 			point_pos = lkeydown;
-
-			if (point_head == NULL)
+			if (choose_head == NULL)
 			{
-				point_head = new point_array;
-				point_head->operation = operation;
-				point_head->count_num = count;
-				point_head->point = lkeydown;
-				point_head->next = NULL;
-				point_temp2 = point_head;
-				count++;
+				choose_head = new choose_array;
+				choose_head->choose = 1;
+				choose_head->operation = operation;
+				choose_head->point1 = lkeydown;
+				choose_head->next = NULL;
+				choose_temp2 = choose_head;
 			}
 			else
 			{
-				point_temp1 = new point_array;
-				point_temp1->operation = operation;
-				point_temp1->point = lkeydown;
-				point_temp1->count_num = count;
-				point_temp1->next = NULL;
-				point_temp2->next = point_temp1;
-				point_temp2 = point_temp1;
-				count++;
+				choose_temp1 = new choose_array;
+				choose_temp1->choose = 1;
+				choose_temp1->operation = operation;
+				choose_temp1->point1 = lkeydown;
+				choose_temp1->next = NULL;
+				choose_temp2->next = choose_temp1;
+				choose_temp2 = choose_temp1;
 			}
-
 		}
 		if (choose_status == 2)
 		{
 			if (choose_rect == 1)
 			{
-				if (rect_head == NULL)
+				if (choose_head == NULL)
 				{
-					rect_head = new rect_array;
-					rect_head->operation = operation;
-					rect_head->point1 = lkeydown;
-					rect_head->count_num = count;
-					rect_head->next = NULL;
-					rect_temp2 = rect_head;
+					choose_head = new choose_array;
+					choose_head->choose = 2;
+					choose_head->operation = operation;
+					choose_head->point1 = lkeydown;
+					choose_head->next = NULL;
+					choose_temp2 = choose_head;
 				}
 				else
 				{
-					rect_temp1 = new rect_array;
-					rect_temp1->operation = operation;
-					rect_temp1->point1 = lkeydown;
-					rect_temp1->count_num = count;
-					rect_temp1->next = NULL;
-					rect_temp2->next = rect_temp1;
-					rect_temp2 = rect_temp1;
+					choose_temp1 = new choose_array;
+					choose_temp1->choose = 2;
+					choose_temp1->operation = operation;
+					choose_temp1->point1 = lkeydown;
+					choose_temp1->next = NULL;
+					choose_temp2->next = choose_temp1;
+					choose_temp2 = choose_temp1;
 				}
 				choose_rect = 2;
 			}
 			else
 			{
-				if (rect_head->next == NULL)
+				if (choose_head->next == NULL)
 				{
-					rect_head->point2 = lkeydown;
+					choose_head->point2 = lkeydown;
 				}
 				else
 				{
-					rect_temp2->point2 = lkeydown;
+					choose_temp2->point2 = lkeydown;
 				}
 				choose_rect = 1;
-				count++;
 			}
-
 		}
 		if (choose_status == 3)
 		{
 			if (choose_circle == 1)
 			{
-				if (circle_head == NULL)
+				if (choose_head == NULL)
 				{
-					circle_head = new circle_array;
-					circle_head->operation = operation;
-					circle_head->central = lkeydown;
-					circle_head->count_num = count;
-					circle_head->next = NULL;
-					circle_temp2 = circle_head;
+					choose_head = new choose_array;
+					choose_head->choose = 3;
+					choose_head->operation = operation;
+					choose_head->point1 = lkeydown;
+					choose_head->next = NULL;
+					choose_temp2 = choose_head;
 				}
 				else
 				{
-					circle_temp1 = new circle_array;
-					circle_temp1->operation = operation;
-					circle_temp1->central = lkeydown;
-					circle_temp1->count_num = count;
-					circle_temp1->next = NULL;
-					circle_temp2->next = circle_temp1;
-					circle_temp2 = circle_temp1;
+					choose_temp1 = new choose_array;
+					choose_temp1->choose = 3;
+					choose_temp1->operation = operation;
+					choose_temp1->point1 = lkeydown;
+					choose_temp1->next = NULL;
+					choose_temp2->next = choose_temp1;
+					choose_temp2 = choose_temp1;
 				}
 				choose_circle = 2;
 			}
 			else
 			{
-				if (circle_head->next == NULL)
+				if (choose_head->next == NULL)
 				{
-					circle_head->radius = distance(lkeydown,circle_head->central);
+					choose_head->radius = distance(lkeydown,choose_head->point1);
 				}
 				else
 				{
-					circle_temp2->radius = distance(lkeydown,circle_temp2->central);
+					choose_temp2->radius = distance(lkeydown,choose_temp2->point1);
 				}
 				choose_circle = 1;
-				count++;
 			}
 		}
 	}
@@ -422,12 +442,14 @@ void CLeftView::OnChooseRect()
 	Invalidate();
 }
 
+
 void CLeftView::OnChooseCircle()
 {
 	// TODO: 在此添加命令处理程序代码
 	choose_status = 3;
 	Invalidate();
 }
+
 
 void CLeftView::OnUpdateChoosePoint(CCmdUI *pCmdUI)
 {
@@ -501,7 +523,6 @@ void CLeftView::OnUpdateMinus(CCmdUI *pCmdUI)
 }
 
 
-
 void CLeftView::OnSetColor()
 {
 	// TODO: 在此添加命令处理程序代码
@@ -509,3 +530,145 @@ void CLeftView::OnSetColor()
 	td->Create(IDD_SET_COLOR,this);
 	td->ShowWindow(SW_SHOW);	
 }
+
+
+void CLeftView::OnViewShow()
+{
+	// TODO: 在此添加命令处理程序代码
+	show_status = show_status == 1? 0 : 1;
+	Invalidate();
+}
+
+
+void CLeftView::OnUpdateViewShow(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(show_status == 1);
+}
+
+
+bool CLeftView::IsInChoose(CPoint p)
+{
+	int inStatus = 0;
+	if (choose_head->choose == 1)
+	{
+		if (p.x == choose_head->point1.x && p.y == choose_head->point1.y)
+		{
+			inStatus = 1;
+		}
+		else
+		{
+			inStatus = 0;
+		}
+	}
+	if (choose_head->choose == 2)
+	{
+		if (PointInRect(p,choose_head->point1,choose_head->point2))
+		{
+			inStatus = 1;		
+		}
+		else
+		{
+			inStatus = 0;		
+		}
+
+	}
+	if (choose_head->choose == 3)
+	{
+		if ((p.x - choose_head->point1.x) * (p.x - choose_head->point1.x) + (p.y - choose_head->point1.y) * (p.y - choose_head->point1.y) <= choose_head->radius * choose_head->radius)
+		{
+			inStatus = 1;
+		}
+		else
+		{	
+			inStatus = 0;
+		}
+
+	}
+	for (choose_temp1 = choose_head->next;choose_temp1 != NULL;choose_temp1 = choose_temp1->next)
+	{
+		if (choose_temp1->choose == 1)
+		{
+			if (p.x == choose_temp1->point1.x && p.y == choose_temp1->point1.y)
+			{
+				if (operation == 2)
+				{
+					inStatus = 1;
+				}
+				if (operation == 3)
+				{						
+					inStatus = 0;	
+				}
+			}
+			else
+			{
+				if (operation == 1)
+				{
+					inStatus = 0;					
+				}
+			}
+			continue;
+		}
+		if (choose_temp1->choose == 2)
+		{
+			if (PointInRect(p,choose_temp1->point1,choose_temp1->point2))
+			{
+				if (operation == 2)
+				{
+					inStatus = 1;
+				}
+				if (operation == 3)
+				{						
+					inStatus = 0;	
+				}
+			}
+			else
+			{
+				if (operation == 1)
+				{
+					inStatus = 0;					
+				}
+
+			}
+			continue;
+		}
+		if (choose_temp1->choose == 3)
+		{
+			if ((p.x - choose_temp1->point1.x) * (p.x - choose_temp1->point1.x) + (p.y - choose_temp1->point1.y) * (p.y - choose_temp1->point1.y) <= choose_temp1->radius * choose_temp1->radius)
+			{
+				if (operation == 2)
+				{
+					inStatus = 1;
+				}
+				if (operation == 3)
+				{						
+					inStatus = 0;	
+				}
+			}
+			else
+			{
+				if (operation == 1)
+				{
+					inStatus = 0;					
+				}
+			}
+			continue;
+		}
+	}
+	return inStatus;
+}
+
+
+bool CLeftView::PointInRect(CPoint p,CPoint point1,CPoint point2)
+{
+	bool res = 0;
+	if ((p.x >= point1.x && p.x <= point2.x && point1.x <= point2.x) || (p.x >= point2.x && p.x <= point1.x && point2.x <= point1.x))
+	{
+		if ((p.y >= point1.y && p.y <= point2.y && point1.y <= point2.y) || (p.y >= point2.y && p.y <= point1.y && point2.y <= point1.y))
+		{
+			res = 1;
+		}
+	}
+	return res;
+}//p:判断的点
+//point1,point2矩形顶点

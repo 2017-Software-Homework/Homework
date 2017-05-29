@@ -10,6 +10,8 @@ class ProjectDialog : public CDialog
 public:
 	ProjectDialog(CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~ProjectDialog();
+	int set_color[3];
+	void change_color();
 
 // 对话框数据
 	enum { IDD = IDD_SET_COLOR };
