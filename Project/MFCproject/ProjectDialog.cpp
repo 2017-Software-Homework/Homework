@@ -5,7 +5,7 @@
 #include "MFCproject.h"
 #include "ProjectDialog.h"
 #include "afxdialogex.h"
-
+#include "Data.h"
 
 // ProjectDialog 对话框
 
@@ -72,17 +72,15 @@ void ProjectDialog::OnBnClickedOk()
 	if (b < 0 || b > 255)
 	{
 		wrong += 4;
-	}
-	
+	}	
 	if (wrong == 0)
 	{
 		//MessageBox(_T("R值为:") + str1 + _T("\nG值为:") + str2 + _T("\nB值为:") + str3,_T("程序运行结果"),MB_OK);
 		//输出提示框,只用于测试,交作业时加注释
-		set_color[0] = r;
-		set_color[1] = g;
-		set_color[2] = b;
 		CDialog::OnOK();
-		change_color();
+		color = RGB(r,g,b);
+		color_status = 1;
+		Invalidate();
 	}
 	else
 	{
@@ -94,11 +92,5 @@ void ProjectDialog::OnBnClickedOk()
 		if (wrong >= 4)
 			str_wrong += _T("B值错误");
 		MessageBox(str_wrong,_T("错误提示"),MB_OK);
-	}	
-}
-
-
-void ProjectDialog::change_color()
-{
-
+	}
 }

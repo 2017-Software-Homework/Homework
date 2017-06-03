@@ -4,8 +4,11 @@
 #include "stdafx.h"
 #include "MFCproject.h"
 #include "RightView.h"
+#include "Data.h"
 
-
+extern COLORREF color_to_set,color;
+extern int color_change;
+extern int red,green,blue;
 // CRightView
 
 IMPLEMENT_DYNCREATE(CRightView, CView)
@@ -14,7 +17,6 @@ CRightView::CRightView()
 {
 	point_pos.x = 0;
 	point_pos.y = 0;
-	red = green = blue = 0;
 }
 
 CRightView::~CRightView()
@@ -23,6 +25,7 @@ CRightView::~CRightView()
 
 BEGIN_MESSAGE_MAP(CRightView, CView)
 	ON_COMMAND(ID_EDIT_REFRESH, &CRightView::OnEditRefresh)
+//	ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
 
@@ -73,3 +76,4 @@ void CRightView::OnEditRefresh()
 	// TODO: 在此添加命令处理程序代码
 	Invalidate();
 }
+

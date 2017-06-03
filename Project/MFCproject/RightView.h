@@ -9,11 +9,7 @@ class CRightView : public CView
 
 
 public:
-	int red;
-	int green;
-	int blue;
 	CPoint point_pos;
-	COLORREF color;
 	COLORREF changed_color;
 	void ShowTheColor(CDC *pDC);
 
@@ -35,6 +31,7 @@ protected:
 public:
 	afx_msg void OnEditRefresh();
 //	virtual void OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/);
+//	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 };
 
 

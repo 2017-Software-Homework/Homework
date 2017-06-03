@@ -3,7 +3,6 @@
 //
 
 #include "stdafx.h"
-#include "MFCproject.h"
 
 #include "MainFrm.h"
 
@@ -13,6 +12,10 @@
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
+
+COLORREF color;
+int color_status = 0;
+int red,green,blue;
 
 // CMainFrame
 
@@ -102,8 +105,3 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 	//return CFrameWnd::OnCreateClient(lpcs, pContext);
 }
 
-
-//void CMainFrame::OnSetColor()
-//{
-//	// TODO: 在此添加命令处理程序代码
-//}

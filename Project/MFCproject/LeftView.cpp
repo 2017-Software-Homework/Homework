@@ -6,8 +6,14 @@
 #include "LeftView.h"
 #include <math.h>
 #include "ProjectDialog.h"
+#include "Data.h"
 
 // CLeftView
+
+extern COLORREF color_to_set,color;
+extern int color_change;
+extern int color_status;
+extern int red,green,blue;
 
 IMPLEMENT_DYNCREATE(CLeftView, CView)
 
@@ -25,8 +31,6 @@ CLeftView::CLeftView()
 
 	choose_rect = 1;
 	choose_circle = 1;
-
-	count = 1;
 
 	choose_head = choose_temp1 = choose_temp2 = NULL;
 }
@@ -57,6 +61,7 @@ BEGIN_MESSAGE_MAP(CLeftView, CView)
 ON_COMMAND(ID_SET_COLOR, &CLeftView::OnSetColor)
 ON_COMMAND(ID_VIEW_SHOW, &CLeftView::OnViewShow)
 ON_UPDATE_COMMAND_UI(ID_VIEW_SHOW, &CLeftView::OnUpdateViewShow)
+ON_COMMAND(ID_EDIT_CLEAR, &CLeftView::OnEditClear)
 END_MESSAGE_MAP()
 
 
@@ -105,7 +110,6 @@ int CLeftView::distance(CPoint p1,CPoint p2)
 }
 
 
-
 void CLeftView::ShowBitmap(CString BmpName,CDC *pDC)
 {
 	
@@ -141,24 +145,46 @@ void CLeftView::ShowBitmap(CString BmpName,CDC *pDC)
 	percentage = percentage1 > percentage2 ? percentage2 : percentage1;
 	pDC->SetStretchBltMode(STRETCH_HALFTONE);//防止失真
 	pDC->StretchBlt(m_startX,m_startY,int (m_bmp.bmWidth * percentage * zoom) ,int (m_bmp.bmHeight * percentage * zoom),&dcBmp,m_bmstartX,m_bmStartY,m_bmp.bmWidth,m_bmp.bmHeight,SRCCOPY);
-	
-	if (show_status == 1)
+
+	if (color_status == 1)
 	{
-		int x,y;
-		CPoint temp;
+		color_status = 0;
+		choose_generate1 = new choose_array;
+		choose_generate1->change_color = 1;
+		choose_generate1->color_to_set = color;
+		choose_generate1->next = NULL;
+		choose_generate2->next = choose_generate1;
+		choose_generate2 = choose_generate1;
+	}
+		
+	int x,y;
+	CPoint temp;
+	for (x = 0;x <= int (m_bmp.bmWidth * percentage * zoom);x++)
+	{
+		for (y = 0;y <= int (m_bmp.bmHeight * percentage * zoom);y++)
+		{
+			temp.x = x + m_startX;
+			temp.y = y + m_startY;
+			if (ChangeOrNot(temp))
+			{
+				pDC->SetPixel(temp,ColorChangeTo(temp));
+			}
+
+		}
+	}
+	if (show_status == 1)
+	{	
 		for (x = 0;x <= int (m_bmp.bmWidth * percentage * zoom);x++)
 		{
 			for (y = 0;y <= int (m_bmp.bmHeight * percentage * zoom);y++)
 			{
 				temp.x = x + m_startX;
-				temp.y = y + m_startY;
+				temp.y = y + m_startY;	
 				if (!IsInChoose(temp))
 				{
 					pDC->SetPixel(temp,RGB(255,255,255));
-				
 				}
 			}
-	
 		}
 	}
 
@@ -169,6 +195,7 @@ void CLeftView::ShowBitmap(CString BmpName,CDC *pDC)
 //	Invalidate();
 	
 }
+
 
 void CLeftView::ShowInformation(CDC *pDC)
 {
@@ -214,6 +241,7 @@ void CLeftView::ShowInformation(CDC *pDC)
 		pDC->TextOutW(0,20,S3);
 	}
 }
+
 
 void CLeftView::OnFileOpen()
 {
@@ -314,28 +342,30 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 			GetWindowRect(Rect);
 			HDC hDC = ::GetDC(NULL);
 			color = ::GetPixel(hDC,lkeydown.x + Rect.left,lkeydown.y + Rect.top);
+			DeleteDC(hDC);
 			red = GetRValue(color);
 			green = GetGValue(color);
 			blue = GetBValue(color); 
-			point_pos = lkeydown;
 			if (choose_head == NULL)
 			{
 				choose_head = new choose_array;
+				choose_head->change_color = 0;
 				choose_head->choose = 1;
 				choose_head->operation = operation;
 				choose_head->point1 = lkeydown;
 				choose_head->next = NULL;
-				choose_temp2 = choose_head;
+				choose_generate2 = choose_head;
 			}
 			else
 			{
-				choose_temp1 = new choose_array;
-				choose_temp1->choose = 1;
-				choose_temp1->operation = operation;
-				choose_temp1->point1 = lkeydown;
-				choose_temp1->next = NULL;
-				choose_temp2->next = choose_temp1;
-				choose_temp2 = choose_temp1;
+				choose_generate1 = new choose_array;
+				choose_generate1->change_color = 0;
+				choose_generate1->choose = 1;
+				choose_generate1->operation = operation;
+				choose_generate1->point1 = lkeydown;
+				choose_generate1->next = NULL;
+				choose_generate2->next = choose_generate1;
+				choose_generate2 = choose_generate1;
 			}
 		}
 		if (choose_status == 2)
@@ -345,21 +375,23 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 				if (choose_head == NULL)
 				{
 					choose_head = new choose_array;
+					choose_head->change_color = 0;
 					choose_head->choose = 2;
 					choose_head->operation = operation;
 					choose_head->point1 = lkeydown;
 					choose_head->next = NULL;
-					choose_temp2 = choose_head;
+					choose_generate2 = choose_head;
 				}
 				else
 				{
-					choose_temp1 = new choose_array;
-					choose_temp1->choose = 2;
-					choose_temp1->operation = operation;
-					choose_temp1->point1 = lkeydown;
-					choose_temp1->next = NULL;
-					choose_temp2->next = choose_temp1;
-					choose_temp2 = choose_temp1;
+					choose_generate1 = new choose_array;
+					choose_generate1->change_color = 0;
+					choose_generate1->choose = 2;
+					choose_generate1->operation = operation;
+					choose_generate1->point1 = lkeydown;
+					choose_generate1->next = NULL;
+					choose_generate2->next = choose_generate1;
+					choose_generate2 = choose_generate1;
 				}
 				choose_rect = 2;
 			}
@@ -371,7 +403,7 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 				}
 				else
 				{
-					choose_temp2->point2 = lkeydown;
+					choose_generate2->point2 = lkeydown;
 				}
 				choose_rect = 1;
 			}
@@ -383,21 +415,23 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 				if (choose_head == NULL)
 				{
 					choose_head = new choose_array;
+					choose_head->change_color = 0;
 					choose_head->choose = 3;
 					choose_head->operation = operation;
 					choose_head->point1 = lkeydown;
 					choose_head->next = NULL;
-					choose_temp2 = choose_head;
+					choose_generate2 = choose_head;
 				}
 				else
 				{
-					choose_temp1 = new choose_array;
-					choose_temp1->choose = 3;
-					choose_temp1->operation = operation;
-					choose_temp1->point1 = lkeydown;
-					choose_temp1->next = NULL;
-					choose_temp2->next = choose_temp1;
-					choose_temp2 = choose_temp1;
+					choose_generate1 = new choose_array;
+					choose_generate1->change_color = 0;
+					choose_generate1->choose = 3;
+					choose_generate1->operation = operation;
+					choose_generate1->point1 = lkeydown;
+					choose_generate1->next = NULL;
+					choose_generate2->next = choose_generate1;
+					choose_generate2 = choose_generate1;
 				}
 				choose_circle = 2;
 			}
@@ -409,7 +443,7 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 				}
 				else
 				{
-					choose_temp2->radius = distance(lkeydown,choose_temp2->point1);
+					choose_generate2->radius = distance(lkeydown,choose_generate2->point1);
 				}
 				choose_circle = 1;
 			}
@@ -526,9 +560,9 @@ void CLeftView::OnUpdateMinus(CCmdUI *pCmdUI)
 void CLeftView::OnSetColor()
 {
 	// TODO: 在此添加命令处理程序代码
-	ProjectDialog *td=new ProjectDialog;
+	ProjectDialog *td=new ProjectDialog;	
 	td->Create(IDD_SET_COLOR,this);
-	td->ShowWindow(SW_SHOW);	
+	td->ShowWindow(SW_SHOW);
 }
 
 
@@ -548,7 +582,284 @@ void CLeftView::OnUpdateViewShow(CCmdUI *pCmdUI)
 
 
 bool CLeftView::IsInChoose(CPoint p)
+{	
+	bool inStatus = 0;
+	if (choose_head == NULL)
+		return false;
+	if (choose_head->choose == 1)
+	{
+		if (p.x == choose_head->point1.x && p.y == choose_head->point1.y)
+		{
+			inStatus = 1;
+		}
+		else
+		{
+			inStatus = 0;
+		}
+	}
+	if (choose_head->choose == 2)
+	{
+		if (PointInRect(p,choose_head->point1,choose_head->point2))
+		{
+			inStatus = 1;		
+		}
+		else
+		{
+			inStatus = 0;		
+		}
+
+	}
+	if (choose_head->choose == 3)
+	{
+		if ((p.x - choose_head->point1.x) * (p.x - choose_head->point1.x) + (p.y - choose_head->point1.y) * (p.y - choose_head->point1.y) <= choose_head->radius * choose_head->radius)
+		{
+			inStatus = 1;
+		}
+		else
+		{	
+			inStatus = 0;
+		}
+	}
+	for (choose_temp1 = choose_head->next;choose_temp1 != NULL;choose_temp1 = choose_temp1->next)
+	{
+		if (choose_temp1->change_color == 1)
+		{
+			continue;
+		}
+		if (choose_temp1->choose == 1)
+		{
+			if (p.x == choose_temp1->point1.x && p.y == choose_temp1->point1.y)
+			{
+				if (choose_temp1->operation == 2)
+				{
+					inStatus = 1;
+				}
+				if (choose_temp1->operation == 3)
+				{						
+					inStatus = 0;	
+				}
+			}
+			else
+			{
+				if (choose_temp1->operation == 1)
+				{
+					inStatus = 0;					
+				}
+			}
+			continue;
+		}
+		if (choose_temp1->choose == 2)
+		{
+			if (PointInRect(p,choose_temp1->point1,choose_temp1->point2))
+			{
+				if (choose_temp1->operation == 2)
+				{
+					inStatus = 1;
+					continue;
+				}
+				if (choose_temp1->operation == 3)
+				{						
+					inStatus = 0;	
+					continue;
+				}
+			}
+			else
+			{
+				if (choose_temp1->operation == 1)
+				{
+					inStatus = 0;
+					continue;
+				}
+			}
+			
+		}
+		if (choose_temp1->choose == 3)
+		{
+			if ((p.x - choose_temp1->point1.x) * (p.x - choose_temp1->point1.x) + (p.y - choose_temp1->point1.y) * (p.y - choose_temp1->point1.y) <= choose_temp1->radius * choose_temp1->radius)
+			{
+				if (choose_temp1->operation == 2)
+				{
+					inStatus = 1;
+				}
+				if (choose_temp1->operation == 3)
+				{						
+					inStatus = 0;	
+				}
+			}
+			else
+			{
+				if (choose_temp1->operation == 1)
+				{
+					inStatus = 0;					
+				}
+			}
+			continue;
+		}
+	}
+	return inStatus;
+}
+
+
+bool CLeftView::PointInRect(CPoint p,CPoint point1,CPoint point2)
 {
+	bool res = 0;
+	if ((p.x >= point1.x && p.x <= point2.x && point1.x <= point2.x) || (p.x >= point2.x && p.x <= point1.x && point2.x <= point1.x))
+	{
+		if ((p.y >= point1.y && p.y <= point2.y && point1.y <= point2.y) || (p.y >= point2.y && p.y <= point1.y && point2.y <= point1.y))
+		{
+			res = 1;
+		}
+	}
+	return res;
+}//p:判断的点
+//point1,point2矩形顶点
+
+void CLeftView::OnEditClear()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (choose_head == NULL)
+	{
+		MessageBox(_T("选择集为空,无需清空"),_T("提示消息"),MB_ICONASTERISK);
+	}
+	else
+	{
+		for (choose_temp1 = choose_head;choose_temp1 != NULL;)
+		{
+			choose_temp2 = choose_temp1;
+			choose_temp1 = choose_temp1->next;
+			free(choose_temp2);
+		}
+		choose_head = NULL;
+		MessageBox(_T("已清空选择集"),_T("提示消息"),MB_ICONASTERISK);
+		Invalidate();
+	}
+}
+
+
+bool CLeftView::ChangeOrNot(CPoint p)
+{
+	int inStatus = 0;
+	if (choose_head == NULL)
+		return false;
+	if (choose_head->choose == 1)
+	{
+		if (p.x == choose_head->point1.x && p.y == choose_head->point1.y)
+		{
+			inStatus = 1;
+		}
+		else
+		{
+			inStatus = 0;
+		}
+	}
+	if (choose_head->choose == 2)
+	{
+		if (PointInRect(p,choose_head->point1,choose_head->point2))
+		{
+			inStatus = 1;		
+		}
+		else
+		{
+			inStatus = 0;		
+		}
+
+	}
+	if (choose_head->choose == 3)
+	{
+		if ((p.x - choose_head->point1.x) * (p.x - choose_head->point1.x) + (p.y - choose_head->point1.y) * (p.y - choose_head->point1.y) <= choose_head->radius * choose_head->radius)
+		{
+			inStatus = 1;
+		}
+		else
+		{	
+			inStatus = 0;
+		}
+	}
+	for (choose_temp1 = choose_head->next;choose_temp1 != NULL;choose_temp1 = choose_temp1->next)
+	{
+		if (choose_temp1->change_color == 1)
+		{
+			inStatus = inStatus == 0 ? 0: 2;
+			if (inStatus == 2)
+				return true;
+			else
+				continue;
+		}
+		if (choose_temp1->choose == 1)
+		{
+			if (p.x == choose_temp1->point1.x && p.y == choose_temp1->point1.y)
+			{
+				if (choose_temp1->operation == 2)
+				{
+					inStatus = 1;
+				}
+				if (choose_temp1->operation == 3)
+				{						
+					inStatus = 0;	
+				}
+			}
+			else
+			{
+				if (choose_temp1->operation == 1)
+				{
+					inStatus = 0;					
+				}
+			}
+			continue;
+		}
+		if (choose_temp1->choose == 2)
+		{
+			if (PointInRect(p,choose_temp1->point1,choose_temp1->point2))
+			{
+				if (choose_temp1->operation == 2)
+				{
+					inStatus = 1;
+				}
+				if (choose_temp1->operation == 3)
+				{						
+					inStatus = 0;	
+				}
+			}
+			else
+			{
+				if (choose_temp1->operation == 1)
+				{
+					inStatus = 0;					
+				}
+
+			}
+			continue;
+		}
+		if (choose_temp1->choose == 3)
+		{
+			if ((p.x - choose_temp1->point1.x) * (p.x - choose_temp1->point1.x) + (p.y - choose_temp1->point1.y) * (p.y - choose_temp1->point1.y) <= choose_temp1->radius * choose_temp1->radius)
+			{
+				if (choose_temp1->operation == 2)
+				{
+					inStatus = 1;
+				}
+				if (choose_temp1->operation == 3)
+				{						
+					inStatus = 0;	
+				}
+			}
+			else
+			{
+				if (choose_temp1->operation == 1)
+				{
+					inStatus = 0;					
+				}
+			}
+			continue;
+		}
+	}
+	return inStatus == 2 ? 1 : 0;
+}
+
+
+COLORREF CLeftView::ColorChangeTo(CPoint p)
+{
+	COLORREF res;
 	int inStatus = 0;
 	if (choose_head->choose == 1)
 	{
@@ -583,92 +894,90 @@ bool CLeftView::IsInChoose(CPoint p)
 		{	
 			inStatus = 0;
 		}
-
 	}
 	for (choose_temp1 = choose_head->next;choose_temp1 != NULL;choose_temp1 = choose_temp1->next)
 	{
+		if (choose_temp1->change_color == 1)
+		{
+			if (inStatus == 1)
+				res = choose_temp1->color_to_set;
+			continue;
+		}
 		if (choose_temp1->choose == 1)
 		{
 			if (p.x == choose_temp1->point1.x && p.y == choose_temp1->point1.y)
 			{
-				if (operation == 2)
+				if (choose_temp1->operation == 2)
 				{
 					inStatus = 1;
+					continue;
 				}
-				if (operation == 3)
+				if (choose_temp1->operation == 3)
 				{						
 					inStatus = 0;	
+					continue;
 				}
 			}
 			else
 			{
-				if (operation == 1)
+				if (choose_temp1->operation == 1)
 				{
-					inStatus = 0;					
+					inStatus = 0;
+					continue;
 				}
 			}
-			continue;
+			
 		}
 		if (choose_temp1->choose == 2)
 		{
 			if (PointInRect(p,choose_temp1->point1,choose_temp1->point2))
 			{
-				if (operation == 2)
+				if (choose_temp1->operation == 2)
 				{
 					inStatus = 1;
+					continue;
 				}
-				if (operation == 3)
+				if (choose_temp1->operation == 3)
 				{						
-					inStatus = 0;	
+					inStatus = 0;
+					continue;
 				}
 			}
 			else
 			{
-				if (operation == 1)
+				if (choose_temp1->operation == 1)
 				{
-					inStatus = 0;					
+					inStatus = 0;	
+					continue;
 				}
 
 			}
-			continue;
+			
 		}
 		if (choose_temp1->choose == 3)
 		{
 			if ((p.x - choose_temp1->point1.x) * (p.x - choose_temp1->point1.x) + (p.y - choose_temp1->point1.y) * (p.y - choose_temp1->point1.y) <= choose_temp1->radius * choose_temp1->radius)
 			{
-				if (operation == 2)
+				if (choose_temp1->operation == 2)
 				{
 					inStatus = 1;
+					continue;
 				}
-				if (operation == 3)
+				if (choose_temp1->operation == 3)
 				{						
-					inStatus = 0;	
+					inStatus = 0;
+					continue;
 				}
 			}
 			else
 			{
-				if (operation == 1)
+				if (choose_temp1->operation == 1)
 				{
-					inStatus = 0;					
+					inStatus = 0;	
+					continue;
 				}
 			}
-			continue;
-		}
-	}
-	return inStatus;
-}
-
-
-bool CLeftView::PointInRect(CPoint p,CPoint point1,CPoint point2)
-{
-	bool res = 0;
-	if ((p.x >= point1.x && p.x <= point2.x && point1.x <= point2.x) || (p.x >= point2.x && p.x <= point1.x && point2.x <= point1.x))
-	{
-		if ((p.y >= point1.y && p.y <= point2.y && point1.y <= point2.y) || (p.y >= point2.y && p.y <= point1.y && point2.y <= point1.y))
-		{
-			res = 1;
 		}
 	}
 	return res;
-}//p:判断的点
-//point1,point2矩形顶点
+}

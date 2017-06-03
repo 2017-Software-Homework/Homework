@@ -48,6 +48,9 @@
     <ClInclude Include="ProjectDialog.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Data.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MFCproject.cpp">

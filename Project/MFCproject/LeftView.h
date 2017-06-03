@@ -1,14 +1,13 @@
 #pragma once
-
-#include "RightView.h"
 // CLeftView 视图
 
-#define POINT 1
-#define RECT 2
-#define CIRCLE 3
 
 struct choose_array
 {
+	bool change_color;
+	COLORREF color_to_set;
+
+
 	int operation;
 	int choose;
 	CPoint point1;
@@ -18,15 +17,14 @@ struct choose_array
 	choose_array* next;
 };
 
-class CLeftView : public CRightView
+class CLeftView : public CView
 {
 	DECLARE_DYNCREATE(CLeftView)
 
 public:
-	choose_array *choose_head,*choose_temp1,*choose_temp2;
+	choose_array *choose_head,*choose_temp1,*choose_temp2,*choose_generate1,*choose_generate2;//generate仅适用于生成新元素
 	int choose_status,operation,choose_rect,choose_circle,load_status,show_status;
 	double zoom;
-	int count;
 	int m_startX;
 	int m_startY;//图片相对位置
 	int m_bmstartX;
@@ -78,6 +76,9 @@ public:
 	afx_msg void OnUpdateViewShow(CCmdUI *pCmdUI);
 	bool IsInChoose(CPoint p);
 	bool PointInRect(CPoint p,CPoint point1,CPoint point2);
+	afx_msg void OnEditClear();
+	bool ChangeOrNot(CPoint p);
+	COLORREF ColorChangeTo(CPoint p);
 };
 
 
