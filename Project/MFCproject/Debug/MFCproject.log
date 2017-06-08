@@ -1,19 +1,25 @@
-﻿生成启动时间为 2017/6/3 13:12:55。
+﻿生成启动时间为 2017/6/8 22:27:18。
      1>项目“C:\Users\肖迅东\HomeWork\Project\MFCproject\MFCproject.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\MFCproject.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt LeftView.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\MFCproject.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt LeftView.cpp MainFrm.cpp ProjectDialog.cpp RightView.cpp
+         RightView.cpp
+         MainFrm.cpp
+         正在生成代码...
+         正在编译...
+         ProjectDialog.cpp
          LeftView.cpp
-     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(272): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(273): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(278): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
-     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(279): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(269): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(270): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(275): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(276): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(281): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(282): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(283): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
      1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(284): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
-     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(285): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
-     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(286): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
-     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(287): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
-     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(292): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
-     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(293): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
-     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(294): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(289): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(290): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(291): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+         正在生成代码...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\肖迅东\HomeWork\Project\Debug\MFCproject.exe" /INCREMENTAL /NOLOGO /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"C:\Users\肖迅东\HomeWork\Project\Debug\MFCproject.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\肖迅东\HomeWork\Project\Debug\MFCproject.lib" /MACHINE:X86 Debug\MFCproject.res
          Debug\LeftView.obj
@@ -29,4 +35,4 @@
 
 生成成功。
 
-已用时间 00:00:00.82
+已用时间 00:00:01.23

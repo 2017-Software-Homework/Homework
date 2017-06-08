@@ -1,28 +1,18 @@
 #pragma once
 // CLeftView 视图
+#include "Data.h"
+extern COLORREF color_to_set,color;
+extern int color_change;
+extern int color_status;
+extern int red,green,blue;
 
 
-struct choose_array
-{
-	bool change_color;
-	COLORREF color_to_set;
-
-
-	int operation;
-	int choose;
-	CPoint point1;
-	CPoint point2;
-	int radius;
-
-	choose_array* next;
-};
 
 class CLeftView : public CView
 {
 	DECLARE_DYNCREATE(CLeftView)
 
-public:
-	choose_array *choose_head,*choose_temp1,*choose_temp2,*choose_generate1,*choose_generate2;//generate仅适用于生成新元素
+public:	
 	int choose_status,operation,choose_rect,choose_circle,load_status,show_status;
 	double zoom;
 	int m_startX;
@@ -80,5 +70,3 @@ public:
 	bool ChangeOrNot(CPoint p);
 	COLORREF ColorChangeTo(CPoint p);
 };
-
-

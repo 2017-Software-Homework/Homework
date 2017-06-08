@@ -1,5 +1,9 @@
 #pragma once
+#include "Data.h"
 
+extern COLORREF color_to_set,color;
+extern int color_change;
+extern int red,green,blue;
 
 // CRightView йсм╪
 

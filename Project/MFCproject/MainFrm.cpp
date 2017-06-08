@@ -16,6 +16,7 @@
 COLORREF color;
 int color_status = 0;
 int red,green,blue;
+choose_array *choose_head,*choose_temp1,*choose_temp2,*choose_generate1,*choose_generate2;//generate仅适用于生成新元素
 
 // CMainFrame
 

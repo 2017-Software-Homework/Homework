@@ -6,14 +6,11 @@
 #include "LeftView.h"
 #include <math.h>
 #include "ProjectDialog.h"
-#include "Data.h"
+
 
 // CLeftView
 
-extern COLORREF color_to_set,color;
-extern int color_change;
-extern int color_status;
-extern int red,green,blue;
+
 
 IMPLEMENT_DYNCREATE(CLeftView, CView)
 
