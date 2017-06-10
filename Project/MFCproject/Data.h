@@ -1,10 +1,11 @@
 #ifndef DATA_H
 #define DATA_H
+#include <set>
 
 extern COLORREF color,color1;
 extern int color_status;
 extern int red,green,blue;
-
+//extern set<COLORREF> color_to_show;
 
 
 struct choose_array
