@@ -6,7 +6,7 @@
 #include "LeftView.h"
 #include <math.h>
 #include "ProjectDialog.h"
-
+#include "SelectDiolog.h"
 
 // CLeftView
 
@@ -59,6 +59,7 @@ ON_COMMAND(ID_SET_COLOR, &CLeftView::OnSetColor)
 ON_COMMAND(ID_VIEW_SHOW, &CLeftView::OnViewShow)
 ON_UPDATE_COMMAND_UI(ID_VIEW_SHOW, &CLeftView::OnUpdateViewShow)
 ON_COMMAND(ID_EDIT_CLEAR, &CLeftView::OnEditClear)
+ON_COMMAND(ID_SELECT_COLOR, &CLeftView::OnSelectColor)
 END_MESSAGE_MAP()
 
 
@@ -148,7 +149,32 @@ void CLeftView::ShowBitmap(CString BmpName,CDC *pDC)
 		color_status = 0;
 		choose_generate1 = new choose_array;
 		choose_generate1->change_color = 1;
+		choose_generate1->left_or_right = 0;
 		choose_generate1->color_to_set = color;
+		choose_generate1->next = NULL;
+		choose_generate2->next = choose_generate1;
+		choose_generate2 = choose_generate1;
+	}
+	if (color_status >= 2 && color_status <= 4)
+	{
+		color_status = 0;
+		choose_generate1 = new choose_array;
+		choose_generate1->left_or_right = 1;
+		choose_generate1->choose = color_status - 1;
+		choose_generate1->operation = operation;
+		choose_generate1->point1.x = GetRValue(color);
+		choose_generate1->point1.y = GetGValue(color);
+		choose_generate1->point1_z = GetBValue(color);
+		if (color_status == 3)
+		{
+			choose_generate1->point2.x = GetRValue(color1);
+			choose_generate1->point2.y = GetGValue(color1);
+			choose_generate1->point2_z = GetBValue(color1);
+		}
+		if (color_status == 4)
+		{
+			choose_generate1->radius = sqrt(double( (GetRValue(color) - GetRValue(color1)) * (GetRValue(color) - GetRValue(color1)) + (GetGValue(color) - GetGValue(color1)) * (GetGValue(color) - GetGValue(color1)) + (GetBValue(color) - GetBValue(color1)) * (GetBValue(color) - GetBValue(color1))));
+		}
 		choose_generate1->next = NULL;
 		choose_generate2->next = choose_generate1;
 		choose_generate2 = choose_generate1;
@@ -166,7 +192,6 @@ void CLeftView::ShowBitmap(CString BmpName,CDC *pDC)
 			{
 				pDC->SetPixel(temp,ColorChangeTo(temp));
 			}
-
 		}
 	}
 	if (show_status == 1)
@@ -334,20 +359,13 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 	else
 	{
 		if(choose_status == 1)
-		{
-			CRect Rect;
-			GetWindowRect(Rect);
-			HDC hDC = ::GetDC(NULL);
-			color = ::GetPixel(hDC,lkeydown.x + Rect.left,lkeydown.y + Rect.top);
-			DeleteDC(hDC);
-			red = GetRValue(color);
-			green = GetGValue(color);
-			blue = GetBValue(color); 
+		{		
 			if (choose_head == NULL)
 			{
 				choose_head = new choose_array;
 				choose_head->change_color = 0;
 				choose_head->choose = 1;
+				choose_head->left_or_right = 0;
 				choose_head->operation = operation;
 				choose_head->point1 = lkeydown;
 				choose_head->next = NULL;
@@ -358,6 +376,7 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 				choose_generate1 = new choose_array;
 				choose_generate1->change_color = 0;
 				choose_generate1->choose = 1;
+				choose_generate1->left_or_right = 0;
 				choose_generate1->operation = operation;
 				choose_generate1->point1 = lkeydown;
 				choose_generate1->next = NULL;
@@ -374,6 +393,7 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 					choose_head = new choose_array;
 					choose_head->change_color = 0;
 					choose_head->choose = 2;
+					choose_head->left_or_right = 0;
 					choose_head->operation = operation;
 					choose_head->point1 = lkeydown;
 					choose_head->next = NULL;
@@ -384,6 +404,7 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 					choose_generate1 = new choose_array;
 					choose_generate1->change_color = 0;
 					choose_generate1->choose = 2;
+					choose_generate1->left_or_right = 0;
 					choose_generate1->operation = operation;
 					choose_generate1->point1 = lkeydown;
 					choose_generate1->next = NULL;
@@ -414,6 +435,7 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 					choose_head = new choose_array;
 					choose_head->change_color = 0;
 					choose_head->choose = 3;
+					choose_head->left_or_right = 0;
 					choose_head->operation = operation;
 					choose_head->point1 = lkeydown;
 					choose_head->next = NULL;
@@ -424,6 +446,7 @@ void CLeftView::OnLButtonUp(UINT nFlags, CPoint point)
 					choose_generate1 = new choose_array;
 					choose_generate1->change_color = 0;
 					choose_generate1->choose = 3;
+					choose_generate1->left_or_right = 0;
 					choose_generate1->operation = operation;
 					choose_generate1->point1 = lkeydown;
 					choose_generate1->next = NULL;
@@ -557,7 +580,7 @@ void CLeftView::OnUpdateMinus(CCmdUI *pCmdUI)
 void CLeftView::OnSetColor()
 {
 	// TODO: 在此添加命令处理程序代码
-	ProjectDialog *td=new ProjectDialog;	
+	ProjectDialog *td=new ProjectDialog;
 	td->Create(IDD_SET_COLOR,this);
 	td->ShowWindow(SW_SHOW);
 }
@@ -617,80 +640,184 @@ bool CLeftView::IsInChoose(CPoint p)
 			inStatus = 0;
 		}
 	}
+
+
+
+	//////////
 	for (choose_temp1 = choose_head->next;choose_temp1 != NULL;choose_temp1 = choose_temp1->next)
 	{
-		if (choose_temp1->change_color == 1)
+		if(choose_temp1->left_or_right == 0)
 		{
-			continue;
-		}
-		if (choose_temp1->choose == 1)
-		{
-			if (p.x == choose_temp1->point1.x && p.y == choose_temp1->point1.y)
+			if (choose_temp1->change_color == 1)
 			{
-				if (choose_temp1->operation == 2)
-				{
-					inStatus = 1;
-				}
-				if (choose_temp1->operation == 3)
-				{						
-					inStatus = 0;	
-				}
+				continue;
 			}
-			else
+			if (choose_temp1->choose == 1)
 			{
-				if (choose_temp1->operation == 1)
+				if (p.x == choose_temp1->point1.x && p.y == choose_temp1->point1.y)
 				{
-					inStatus = 0;					
+					if (choose_temp1->operation == 2)
+					{
+						inStatus = 1;
+					}
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+					}
 				}
+				else
+				{
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;					
+					}
+				}
+				continue;
 			}
-			continue;
-		}
-		if (choose_temp1->choose == 2)
-		{
-			if (PointInRect(p,choose_temp1->point1,choose_temp1->point2))
+			if (choose_temp1->choose == 2)
 			{
-				if (choose_temp1->operation == 2)
+				if (PointInRect(p,choose_temp1->point1,choose_temp1->point2))
 				{
-					inStatus = 1;
-					continue;
+					if (choose_temp1->operation == 2)
+					{
+						inStatus = 1;
+						continue;
+					}
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+						continue;
+					}
 				}
-				if (choose_temp1->operation == 3)
-				{						
-					inStatus = 0;	
-					continue;
-				}
-			}
-			else
-			{
-				if (choose_temp1->operation == 1)
+				else
 				{
-					inStatus = 0;
-					continue;
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;
+						continue;
+					}
 				}
-			}
 			
+			}
+			if (choose_temp1->choose == 3)
+			{
+				if ((p.x - choose_temp1->point1.x) * (p.x - choose_temp1->point1.x) + (p.y - choose_temp1->point1.y) * (p.y - choose_temp1->point1.y) <= choose_temp1->radius * choose_temp1->radius)
+				{
+					if (choose_temp1->operation == 2)
+					{
+						inStatus = 1;
+					}
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+					}
+				}
+				else
+				{
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;					
+					}
+				}
+				continue;
+			}
 		}
-		if (choose_temp1->choose == 3)
+
+
+		//////////////////////
+		else
 		{
-			if ((p.x - choose_temp1->point1.x) * (p.x - choose_temp1->point1.x) + (p.y - choose_temp1->point1.y) * (p.y - choose_temp1->point1.y) <= choose_temp1->radius * choose_temp1->radius)
+			CRect Rect;
+			COLORREF temp_color;
+			GetWindowRect(Rect);
+			HDC hDC = ::GetDC(NULL);
+			temp_color = ::GetPixel(hDC,p.x + Rect.left,p.y + Rect.top);
+			DeleteDC(hDC);
+			if (choose_temp1->choose == 1)
 			{
-				if (choose_temp1->operation == 2)
+				if (choose_temp1->point1.x == GetRValue(temp_color) && choose_temp1->point1.y == GetGValue(temp_color) && choose_temp1->point1_z == GetBValue(temp_color))
 				{
-					inStatus = 1;
+					if (choose_temp1->operation == 2)
+					{
+						inStatus = 1;
+					}
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+					}
 				}
-				if (choose_temp1->operation == 3)
-				{						
-					inStatus = 0;	
+				else
+				{
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;					
+					}
 				}
+				continue;
+
 			}
-			else
+			if (choose_temp1->choose == 2)
 			{
-				if (choose_temp1->operation == 1)
+				if (((choose_temp1->point1.x <= GetRValue(temp_color)) && 
+					(choose_temp1->point2.x >= GetRValue(temp_color)) && 
+					(choose_temp1->point1.y <= GetGValue(temp_color)) && 
+					(choose_temp1->point2.y >= GetGValue(temp_color)) && 
+					(choose_temp1->point1_z <= GetBValue(temp_color))&& 
+					(choose_temp1->point2_z >= GetBValue(temp_color)))
+					|| 
+					((choose_temp1->point2.x <= GetRValue(temp_color)) && 
+					(choose_temp1->point1.x >= GetRValue(temp_color)) && 
+					(choose_temp1->point2.y <= GetGValue(temp_color)) && 
+					(choose_temp1->point1.y >= GetGValue(temp_color)) && 
+					(choose_temp1->point2_z <= GetBValue(temp_color))&& 
+					(choose_temp1->point1_z >= GetBValue(temp_color))))
 				{
-					inStatus = 0;					
+					if (choose_temp1->operation == 2)
+					{
+						inStatus = 1;
+						continue;
+					}
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+						continue;
+					}
 				}
+				else
+				{
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;
+						continue;
+					}
+				}
+
 			}
-			continue;
+			if (choose_temp1->choose == 3)
+			{
+				if ((GetRValue(temp_color) - choose_temp1->point1.x) * (GetRValue(temp_color) - choose_temp1->point1.x) 
+					+ (GetGValue(temp_color) - choose_temp1->point1.y) * (GetGValue(temp_color) - choose_temp1->point1.y)
+					+ (GetBValue(temp_color) - choose_temp1->point1_z) * (GetBValue(temp_color) - choose_temp1->point1_z)
+					<= choose_temp1->radius * choose_temp1->radius)
+				{
+					if (choose_temp1->operation == 2)
+					{
+						inStatus = 1;
+					}
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+					}
+				}
+				else
+				{
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;					
+					}
+				}
+				continue;
+			}
 		}
 	}
 	return inStatus;
@@ -977,4 +1104,13 @@ COLORREF CLeftView::ColorChangeTo(CPoint p)
 		}
 	}
 	return res;
+}
+
+
+void CLeftView::OnSelectColor()
+{
+	// TODO: 在此添加命令处理程序代码
+	SelectDiolog *td=new SelectDiolog;	
+	td->Create(IDD_SELECT_COLOR,this);
+	td->ShowWindow(SW_SHOW);
 }

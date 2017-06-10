@@ -1,21 +1,28 @@
 #ifndef DATA_H
 #define DATA_H
 
-extern COLORREF color;
+extern COLORREF color,color1;
 extern int color_status;
 extern int red,green,blue;
 
 
+
 struct choose_array
 {
-	bool change_color;
-	COLORREF color_to_set;
+	bool left_or_right;//选择左边视图还是右边视图 左-LEFT-0 右-RIGHT-1
+	bool change_color;//是否更改颜色
+	COLORREF color_to_set;//更改后的颜色
 
+	int operation;//operation表示并-1 交-2 差-3
+	int choose;//choose表示选择点-1 矩形-2 圆-3
 
-	int operation;
-	int choose;
 	CPoint point1;
+	int point1_z;
+	
 	CPoint point2;
+	int point2_z;
+	//z表示三维坐标中的z坐标
+
 	int radius;
 
 	choose_array* next;

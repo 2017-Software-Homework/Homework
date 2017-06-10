@@ -1,7 +1,7 @@
 #pragma once
 // CLeftView йсм╪
 #include "Data.h"
-extern COLORREF color_to_set,color;
+extern COLORREF color_to_set,color,color1;
 extern int color_change;
 extern int color_status;
 extern int red,green,blue;
@@ -69,4 +69,5 @@ public:
 	afx_msg void OnEditClear();
 	bool ChangeOrNot(CPoint p);
 	COLORREF ColorChangeTo(CPoint p);
+	afx_msg void OnSelectColor();
 };

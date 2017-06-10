@@ -1,5 +1,6 @@
 #pragma once
 // ProjectDialog 对话框
+#include "Data.h"
 
 class ProjectDialog : public CDialog
 {
@@ -11,7 +12,8 @@ public:
 	void change_color();
 
 // 对话框数据
-	enum { IDD = IDD_SET_COLOR };
+	enum  {IDD = IDD_SET_COLOR};
+	 ;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持

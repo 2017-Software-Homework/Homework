@@ -9,7 +9,7 @@
 #define IDD_LEFTVIEW                    310
 #define IDD_RIGHTVIEW                   311
 #define IDD_SET_COLOR                   313
-#define IDD_CHOOSE_COLOR                317
+#define IDD_SELECT_COLOR                317
 #define IDC_EDIT1                       1000
 #define IDC_EDIT2                       1001
 #define IDC_EDIT3                       1002
@@ -18,7 +18,8 @@
 #define IDC_EDIT5                       1004
 #define IDC_MFCCOLORBUTTON1             1005
 #define IDC_EDIT6                       1005
-#define IDC_COMBO1                      1007
+#define IDC_SELECT                      1007
+#define IDC_EDIT30                      1013
 #define ID_32771                        32771
 #define ID_32772                        32772
 #define ID_32773                        32773
@@ -37,14 +38,16 @@
 #define ID_32786                        32786
 #define ID_VIEW_SHOW                    32787
 #define ID_32788                        32788
+#define ID_32789                        32789
+#define ID_SELECT_COLOR                 32790
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        318
-#define _APS_NEXT_COMMAND_VALUE         32789
-#define _APS_NEXT_CONTROL_VALUE         1008
+#define _APS_NEXT_RESOURCE_VALUE        319
+#define _APS_NEXT_COMMAND_VALUE         32791
+#define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

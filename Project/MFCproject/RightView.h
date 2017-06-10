@@ -34,8 +34,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnEditRefresh();
-//	virtual void OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/);
-//	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 };
 
 

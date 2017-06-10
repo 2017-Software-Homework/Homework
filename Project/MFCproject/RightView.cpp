@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "MFCproject.h"
 #include "RightView.h"
+#include "ProjectDialog.h"
 
 // CRightView
 
@@ -22,6 +23,7 @@ CRightView::~CRightView()
 BEGIN_MESSAGE_MAP(CRightView, CView)
 	ON_COMMAND(ID_EDIT_REFRESH, &CRightView::OnEditRefresh)
 //	ON_WM_LBUTTONUP()
+//ON_COMMAND(ID_SELECT_COLOR, &CRightView::OnSelectColor)
 END_MESSAGE_MAP()
 
 
@@ -72,4 +74,7 @@ void CRightView::OnEditRefresh()
 	// TODO: 在此添加命令处理程序代码
 	Invalidate();
 }
+
+
+
 

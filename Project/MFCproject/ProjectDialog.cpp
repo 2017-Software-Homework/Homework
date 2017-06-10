@@ -5,7 +5,7 @@
 #include "MFCproject.h"
 #include "ProjectDialog.h"
 #include "afxdialogex.h"
-#include "Data.h"
+
 
 // ProjectDialog 对话框
 
@@ -14,8 +14,9 @@ IMPLEMENT_DYNAMIC(ProjectDialog, CDialog)
 ProjectDialog::ProjectDialog(CWnd* pParent /*=NULL*/)
 	: CDialog(ProjectDialog::IDD, pParent)
 {
-
 }
+
+
 
 ProjectDialog::~ProjectDialog()
 {
@@ -46,7 +47,6 @@ void ProjectDialog::OnSetColor()
 void ProjectDialog::OnBnClickedOk()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	
 	CEdit *pBox1,*pBox2,*pBox3;
 	pBox1 = (CEdit*) GetDlgItem(IDC_EDIT1);
 	pBox2 = (CEdit*) GetDlgItem(IDC_EDIT2);
@@ -77,9 +77,10 @@ void ProjectDialog::OnBnClickedOk()
 	{
 		//MessageBox(_T("R值为:") + str1 + _T("\nG值为:") + str2 + _T("\nB值为:") + str3,_T("程序运行结果"),MB_OK);
 		//输出提示框,只用于测试,交作业时加注释
-		CDialog::OnOK();
+		
 		color = RGB(r,g,b);
 		color_status = 1;
+		CDialog::OnOK();
 		Invalidate();
 	}
 	else
@@ -94,3 +95,5 @@ void ProjectDialog::OnBnClickedOk()
 		MessageBox(str_wrong,_T("错误提示"),MB_OK);
 	}
 }
+
+
