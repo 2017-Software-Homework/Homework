@@ -21,6 +21,7 @@ int color_status = 0;//ÊÇ·ñ¸Ä±äÑÕÉ« 0-²»¸Ä±ä 1-¸Ä±ä 2-Ñ¡ÔñÁËÒ»¸öµã 3-Ñ¡ÔñÁË³¤·½Ì
 int red,green,blue;
 choose_array *choose_head,*choose_temp1,*choose_temp2,*choose_generate1,*choose_generate2;//generate½öÊÊÓÃÓÚÉú³ÉĞÂÔªËØ
 set<COLORREF> color_to_show;
+int color_select_status = 0;
 
 // CMainFrame
 

@@ -5,6 +5,7 @@
 #include "MFCproject.h"
 #include "SelectDiolog.h"
 #include "afxdialogex.h"
+#include "Data.h"
 
 
 // SelectDiolog ¶Ô»°¿ò
@@ -121,6 +122,7 @@ void SelectDiolog::OnBnClickedOk()
 			color_status = 3;
 		}
 		CDialog::OnOK();
+		color_select_status = 1;
 	}
 	else
 	{

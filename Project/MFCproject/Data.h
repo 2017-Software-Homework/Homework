@@ -8,6 +8,7 @@ extern COLORREF color,color1;
 extern int color_status;
 extern int red,green,blue;
 extern set<COLORREF> color_to_show;
+extern int color_select_status;
 
 
 struct choose_array
@@ -16,7 +17,7 @@ struct choose_array
 	bool change_color;//是否更改颜色
 	COLORREF color_to_set;//更改后的颜色
 
-	int operation;//operation表示并-1 交-2 差-3
+	int operation;//operation表示交-1 并-2 差-3
 	int choose;//choose表示选择点-1 矩形-2 圆-3
 
 	CPoint point1;

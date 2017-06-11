@@ -64,10 +64,12 @@ public:
 	afx_msg void OnSetColor();
 	afx_msg void OnViewShow();
 	afx_msg void OnUpdateViewShow(CCmdUI *pCmdUI);
-	bool IsInChoose(CPoint p);
+	bool IsInChoose(CPoint p,CDC *pDC);
 	bool PointInRect(CPoint p,CPoint point1,CPoint point2);
 	afx_msg void OnEditClear();
-	bool ChangeOrNot(CPoint p);
-	COLORREF ColorChangeTo(CPoint p);
+	bool ChangeOrNot(CPoint p,CDC *pDC);
+	COLORREF ColorChangeTo(CPoint p,CDC *pDC);
 	afx_msg void OnSelectColor();
+	afx_msg void OnUpdateSetColor(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateSelectColor(CCmdUI *pCmdUI);
 };

@@ -16,7 +16,7 @@ IMPLEMENT_DYNCREATE(CLeftView, CView)
 
 CLeftView::CLeftView()
 {
-	operation = 1;
+	operation = 2;
 	choose_status = 1;
 	load_status = 0;
 	show_status = 0;
@@ -60,6 +60,8 @@ ON_COMMAND(ID_VIEW_SHOW, &CLeftView::OnViewShow)
 ON_UPDATE_COMMAND_UI(ID_VIEW_SHOW, &CLeftView::OnUpdateViewShow)
 ON_COMMAND(ID_EDIT_CLEAR, &CLeftView::OnEditClear)
 ON_COMMAND(ID_SELECT_COLOR, &CLeftView::OnSelectColor)
+ON_UPDATE_COMMAND_UI(ID_SET_COLOR, &CLeftView::OnUpdateSetColor)
+ON_UPDATE_COMMAND_UI(ID_SELECT_COLOR, &CLeftView::OnUpdateSelectColor)
 END_MESSAGE_MAP()
 
 
@@ -180,31 +182,54 @@ void CLeftView::ShowBitmap(CString BmpName,CDC *pDC)
 		choose_generate2 = choose_generate1;
 	}
 		
-	int x,y;
-	CPoint temp;
-	for (x = 0;x <= int (m_bmp.bmWidth * percentage * zoom);x++)
+	if (!((choose_status == 2 && choose_rect == 2) || (choose_status == 2 && choose_circle == 2)))
 	{
-		for (y = 0;y <= int (m_bmp.bmHeight * percentage * zoom);y++)
-		{
-			temp.x = x + m_startX;
-			temp.y = y + m_startY;
-			if (ChangeOrNot(temp))
-			{
-				pDC->SetPixel(temp,ColorChangeTo(temp));
-			}
-		}
-	}
-	if (show_status == 1)
-	{	
+		int x,y;
+		CPoint temp;
+		color_to_show.clear();
 		for (x = 0;x <= int (m_bmp.bmWidth * percentage * zoom);x++)
 		{
 			for (y = 0;y <= int (m_bmp.bmHeight * percentage * zoom);y++)
 			{
 				temp.x = x + m_startX;
-				temp.y = y + m_startY;	
-				if (!IsInChoose(temp))
+				temp.y = y + m_startY;
+				if (ChangeOrNot(temp,pDC))
 				{
-					pDC->SetPixel(temp,RGB(255,255,255));
+					pDC->SetPixel(temp,ColorChangeTo(temp,pDC));
+				}
+			}
+		}
+		if (show_status == 1)
+		{	
+			for (x = 0;x <= int (m_bmp.bmWidth * percentage * zoom);x++)
+			{
+				for (y = 0;y <= int (m_bmp.bmHeight * percentage * zoom);y++)
+				{
+					temp.x = x + m_startX;
+					temp.y = y + m_startY;	
+					if (!IsInChoose(temp,pDC))
+					{
+						pDC->SetPixel(temp,RGB(255,255,255));
+					}
+					else
+					{
+						color_to_show.insert(pDC->GetPixel(temp));
+					}
+				}
+			}
+		}
+		else
+		{	
+			for (x = 0;x <= int (m_bmp.bmWidth * percentage * zoom);x++)
+			{
+				for (y = 0;y <= int (m_bmp.bmHeight * percentage * zoom);y++)
+				{
+					temp.x = x + m_startX;
+					temp.y = y + m_startY;	
+					if (IsInChoose(temp,pDC))
+					{
+						color_to_show.insert(pDC->GetPixel(temp));
+					}
 				}
 			}
 		}
@@ -601,9 +626,10 @@ void CLeftView::OnUpdateViewShow(CCmdUI *pCmdUI)
 }
 
 
-bool CLeftView::IsInChoose(CPoint p)
-{	
-	bool inStatus = 0;
+bool CLeftView::IsInChoose(CPoint p,CDC *pDC)
+{
+	COLORREF temp_color = NULL;
+	bool inStatus = false;
 	if (choose_head == NULL)
 		return false;
 	if (choose_head->choose == 1)
@@ -627,7 +653,6 @@ bool CLeftView::IsInChoose(CPoint p)
 		{
 			inStatus = 0;		
 		}
-
 	}
 	if (choose_head->choose == 3)
 	{
@@ -641,8 +666,6 @@ bool CLeftView::IsInChoose(CPoint p)
 		}
 	}
 
-
-
 	//////////
 	for (choose_temp1 = choose_head->next;choose_temp1 != NULL;choose_temp1 = choose_temp1->next)
 	{
@@ -651,7 +674,7 @@ bool CLeftView::IsInChoose(CPoint p)
 			if (choose_temp1->change_color == 1)
 			{
 				continue;
-			}
+			}			
 			if (choose_temp1->choose == 1)
 			{
 				if (p.x == choose_temp1->point1.x && p.y == choose_temp1->point1.y)
@@ -727,20 +750,14 @@ bool CLeftView::IsInChoose(CPoint p)
 		//////////////////////
 		else
 		{
-			CRect Rect;
-			COLORREF temp_color;
-			GetWindowRect(Rect);
-			HDC hDC = ::GetDC(NULL);
-			temp_color = ::GetPixel(hDC,p.x + Rect.left,p.y + Rect.top);
-			DeleteDC(hDC);
+			if (inStatus == 0)
+				continue;
+			if (temp_color == NULL)		
+				temp_color = pDC->GetPixel(p);		
 			if (choose_temp1->choose == 1)
 			{
 				if (choose_temp1->point1.x == GetRValue(temp_color) && choose_temp1->point1.y == GetGValue(temp_color) && choose_temp1->point1_z == GetBValue(temp_color))
 				{
-					if (choose_temp1->operation == 2)
-					{
-						inStatus = 1;
-					}
 					if (choose_temp1->operation == 3)
 					{						
 						inStatus = 0;	
@@ -772,11 +789,6 @@ bool CLeftView::IsInChoose(CPoint p)
 					(choose_temp1->point2_z <= GetBValue(temp_color))&& 
 					(choose_temp1->point1_z >= GetBValue(temp_color))))
 				{
-					if (choose_temp1->operation == 2)
-					{
-						inStatus = 1;
-						continue;
-					}
 					if (choose_temp1->operation == 3)
 					{						
 						inStatus = 0;	
@@ -791,7 +803,6 @@ bool CLeftView::IsInChoose(CPoint p)
 						continue;
 					}
 				}
-
 			}
 			if (choose_temp1->choose == 3)
 			{
@@ -800,10 +811,6 @@ bool CLeftView::IsInChoose(CPoint p)
 					+ (GetBValue(temp_color) - choose_temp1->point1_z) * (GetBValue(temp_color) - choose_temp1->point1_z)
 					<= choose_temp1->radius * choose_temp1->radius)
 				{
-					if (choose_temp1->operation == 2)
-					{
-						inStatus = 1;
-					}
 					if (choose_temp1->operation == 3)
 					{						
 						inStatus = 0;	
@@ -860,9 +867,10 @@ void CLeftView::OnEditClear()
 }
 
 
-bool CLeftView::ChangeOrNot(CPoint p)
+bool CLeftView::ChangeOrNot(CPoint p,CDC *pDC)
 {
-	int inStatus = 0;
+	bool inStatus = false;
+	COLORREF temp_color = NULL;
 	if (choose_head == NULL)
 		return false;
 	if (choose_head->choose == 1)
@@ -899,92 +907,180 @@ bool CLeftView::ChangeOrNot(CPoint p)
 			inStatus = 0;
 		}
 	}
+	
+	//////////
 	for (choose_temp1 = choose_head->next;choose_temp1 != NULL;choose_temp1 = choose_temp1->next)
 	{
-		if (choose_temp1->change_color == 1)
+		if(choose_temp1->left_or_right == 0)
 		{
-			inStatus = inStatus == 0 ? 0: 2;
-			if (inStatus == 2)
-				return true;
-			else
+			if (choose_temp1->change_color == 1)
+			{
+				if (inStatus == 1)
+					return true;
+				else
+					continue;
+			}		
+			if (choose_temp1->choose == 1)
+			{
+				if (p.x == choose_temp1->point1.x && p.y == choose_temp1->point1.y)
+				{
+					if (choose_temp1->operation == 2)
+					{
+						inStatus = 1;
+					}
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+					}
+				}
+				else
+				{
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;					
+					}
+				}
 				continue;
+			}
+			if (choose_temp1->choose == 2)
+			{
+				if (PointInRect(p,choose_temp1->point1,choose_temp1->point2))
+				{
+					if (choose_temp1->operation == 2)
+					{
+						inStatus = 1;
+						continue;
+					}
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+						continue;
+					}
+				}
+				else
+				{
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;
+						continue;
+					}
+				}
+			
+			}
+			if (choose_temp1->choose == 3)
+			{
+				if ((p.x - choose_temp1->point1.x) * (p.x - choose_temp1->point1.x) + (p.y - choose_temp1->point1.y) * (p.y - choose_temp1->point1.y) <= choose_temp1->radius * choose_temp1->radius)
+				{
+					if (choose_temp1->operation == 2)
+					{
+						inStatus = 1;
+					}
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+					}
+				}
+				else
+				{
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;					
+					}
+				}
+				continue;
+			}
 		}
-		if (choose_temp1->choose == 1)
+		//////////////////////
+		else
 		{
-			if (p.x == choose_temp1->point1.x && p.y == choose_temp1->point1.y)
+			if (inStatus == 0)
+				continue;
+			if (temp_color == NULL)		
+				temp_color = pDC->GetPixel(p);		
+			if (choose_temp1->choose == 1)
 			{
-				if (choose_temp1->operation == 2)
+				if (choose_temp1->point1.x == GetRValue(temp_color) && choose_temp1->point1.y == GetGValue(temp_color) && choose_temp1->point1_z == GetBValue(temp_color))
 				{
-					inStatus = 1;
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+					}
 				}
-				if (choose_temp1->operation == 3)
-				{						
-					inStatus = 0;	
-				}
-			}
-			else
-			{
-				if (choose_temp1->operation == 1)
+				else
 				{
-					inStatus = 0;					
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;					
+					}
 				}
-			}
-			continue;
-		}
-		if (choose_temp1->choose == 2)
-		{
-			if (PointInRect(p,choose_temp1->point1,choose_temp1->point2))
-			{
-				if (choose_temp1->operation == 2)
-				{
-					inStatus = 1;
-				}
-				if (choose_temp1->operation == 3)
-				{						
-					inStatus = 0;	
-				}
-			}
-			else
-			{
-				if (choose_temp1->operation == 1)
-				{
-					inStatus = 0;					
-				}
+				continue;
 
 			}
-			continue;
-		}
-		if (choose_temp1->choose == 3)
-		{
-			if ((p.x - choose_temp1->point1.x) * (p.x - choose_temp1->point1.x) + (p.y - choose_temp1->point1.y) * (p.y - choose_temp1->point1.y) <= choose_temp1->radius * choose_temp1->radius)
+			if (choose_temp1->choose == 2)
 			{
-				if (choose_temp1->operation == 2)
+				if (((choose_temp1->point1.x <= GetRValue(temp_color)) && 
+					(choose_temp1->point2.x >= GetRValue(temp_color)) && 
+					(choose_temp1->point1.y <= GetGValue(temp_color)) && 
+					(choose_temp1->point2.y >= GetGValue(temp_color)) && 
+					(choose_temp1->point1_z <= GetBValue(temp_color))&& 
+					(choose_temp1->point2_z >= GetBValue(temp_color)))
+					|| 
+					((choose_temp1->point2.x <= GetRValue(temp_color)) && 
+					(choose_temp1->point1.x >= GetRValue(temp_color)) && 
+					(choose_temp1->point2.y <= GetGValue(temp_color)) && 
+					(choose_temp1->point1.y >= GetGValue(temp_color)) && 
+					(choose_temp1->point2_z <= GetBValue(temp_color))&& 
+					(choose_temp1->point1_z >= GetBValue(temp_color))))
 				{
-					inStatus = 1;
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+						continue;
+					}
 				}
-				if (choose_temp1->operation == 3)
-				{						
-					inStatus = 0;	
+				else
+				{
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;
+						continue;
+					}
 				}
 			}
-			else
+			if (choose_temp1->choose == 3)
 			{
-				if (choose_temp1->operation == 1)
+				if ((GetRValue(temp_color) - choose_temp1->point1.x) * (GetRValue(temp_color) - choose_temp1->point1.x) 
+					+ (GetGValue(temp_color) - choose_temp1->point1.y) * (GetGValue(temp_color) - choose_temp1->point1.y)
+					+ (GetBValue(temp_color) - choose_temp1->point1_z) * (GetBValue(temp_color) - choose_temp1->point1_z)
+					<= choose_temp1->radius * choose_temp1->radius)
 				{
-					inStatus = 0;					
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+					}
 				}
+				else
+				{
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;					
+					}
+				}
+				continue;
 			}
-			continue;
 		}
 	}
-	return inStatus == 2 ? 1 : 0;
+	return false;	
 }
 
 
-COLORREF CLeftView::ColorChangeTo(CPoint p)
+COLORREF CLeftView::ColorChangeTo(CPoint p,CDC *pDC)
 {
+	COLORREF temp_color = NULL;
 	COLORREF res;
-	int inStatus = 0;
+	bool inStatus = false;
+	if (choose_head == NULL)
+		return false;
 	if (choose_head->choose == 1)
 	{
 		if (p.x == choose_head->point1.x && p.y == choose_head->point1.y)
@@ -1019,90 +1115,173 @@ COLORREF CLeftView::ColorChangeTo(CPoint p)
 			inStatus = 0;
 		}
 	}
+
+	//////////
 	for (choose_temp1 = choose_head->next;choose_temp1 != NULL;choose_temp1 = choose_temp1->next)
 	{
-		if (choose_temp1->change_color == 1)
+		if(choose_temp1->left_or_right == 0)
 		{
-			if (inStatus == 1)
-				res = choose_temp1->color_to_set;
-			continue;
-		}
-		if (choose_temp1->choose == 1)
-		{
-			if (p.x == choose_temp1->point1.x && p.y == choose_temp1->point1.y)
+			if (choose_temp1->change_color == 1)
 			{
-				if (choose_temp1->operation == 2)
-				{
-					inStatus = 1;
-					continue;
-				}
-				if (choose_temp1->operation == 3)
-				{						
-					inStatus = 0;	
-					continue;
-				}
+				if (inStatus == 1)
+					res = choose_temp1->color_to_set;
+				continue;
 			}
-			else
-			{
-				if (choose_temp1->operation == 1)
-				{
-					inStatus = 0;
-					continue;
-				}
-			}
+			if ((choose_temp1->operation == 2 && inStatus == 1) || (choose_temp1->operation == 1 && inStatus == 0) || (choose_temp1->operation == 3 && inStatus == 0))
+				continue;
 			
-		}
-		if (choose_temp1->choose == 2)
-		{
-			if (PointInRect(p,choose_temp1->point1,choose_temp1->point2))
+			if (choose_temp1->choose == 1)
 			{
-				if (choose_temp1->operation == 2)
+				if (p.x == choose_temp1->point1.x && p.y == choose_temp1->point1.y)
 				{
-					inStatus = 1;
-					continue;
+					if (choose_temp1->operation == 2)
+					{
+						inStatus = 1;
+					}
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+					}
 				}
-				if (choose_temp1->operation == 3)
-				{						
-					inStatus = 0;
-					continue;
+				else
+				{
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;					
+					}
 				}
+				continue;
 			}
-			else
+			if (choose_temp1->choose == 2)
 			{
-				if (choose_temp1->operation == 1)
+				if (PointInRect(p,choose_temp1->point1,choose_temp1->point2))
 				{
-					inStatus = 0;	
-					continue;
+					if (choose_temp1->operation == 2)
+					{
+						inStatus = 1;
+						continue;
+					}
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+						continue;
+					}
 				}
+				else
+				{
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;
+						continue;
+					}
+				}
+			
+			}
+			if (choose_temp1->choose == 3)
+			{
+				if ((p.x - choose_temp1->point1.x) * (p.x - choose_temp1->point1.x) + (p.y - choose_temp1->point1.y) * (p.y - choose_temp1->point1.y) <= choose_temp1->radius * choose_temp1->radius)
+				{
+					if (choose_temp1->operation == 2)
+					{
+						inStatus = 1;
+					}
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+					}
+				}
+				else
+				{
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;					
+					}
+				}
+				continue;
+			}
+		}
+
+
+		//////////////////////
+		else
+		{
+			if (inStatus == 0)
+				continue;
+			if (temp_color == NULL)		
+				temp_color = pDC->GetPixel(p);		
+			if (choose_temp1->choose == 1)
+			{
+				if (choose_temp1->point1.x == GetRValue(temp_color) && choose_temp1->point1.y == GetGValue(temp_color) && choose_temp1->point1_z == GetBValue(temp_color))
+				{
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+					}
+				}
+				else
+				{
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;					
+					}
+				}
+				continue;
 
 			}
-			
-		}
-		if (choose_temp1->choose == 3)
-		{
-			if ((p.x - choose_temp1->point1.x) * (p.x - choose_temp1->point1.x) + (p.y - choose_temp1->point1.y) * (p.y - choose_temp1->point1.y) <= choose_temp1->radius * choose_temp1->radius)
+			if (choose_temp1->choose == 2)
 			{
-				if (choose_temp1->operation == 2)
+				if (((choose_temp1->point1.x <= GetRValue(temp_color)) && 
+					(choose_temp1->point2.x >= GetRValue(temp_color)) && 
+					(choose_temp1->point1.y <= GetGValue(temp_color)) && 
+					(choose_temp1->point2.y >= GetGValue(temp_color)) && 
+					(choose_temp1->point1_z <= GetBValue(temp_color))&& 
+					(choose_temp1->point2_z >= GetBValue(temp_color)))
+					|| 
+					((choose_temp1->point2.x <= GetRValue(temp_color)) && 
+					(choose_temp1->point1.x >= GetRValue(temp_color)) && 
+					(choose_temp1->point2.y <= GetGValue(temp_color)) && 
+					(choose_temp1->point1.y >= GetGValue(temp_color)) && 
+					(choose_temp1->point2_z <= GetBValue(temp_color))&& 
+					(choose_temp1->point1_z >= GetBValue(temp_color))))
 				{
-					inStatus = 1;
-					continue;
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+						continue;
+					}
 				}
-				if (choose_temp1->operation == 3)
-				{						
-					inStatus = 0;
-					continue;
+				else
+				{
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;
+						continue;
+					}
 				}
 			}
-			else
+			if (choose_temp1->choose == 3)
 			{
-				if (choose_temp1->operation == 1)
+				if ((GetRValue(temp_color) - choose_temp1->point1.x) * (GetRValue(temp_color) - choose_temp1->point1.x) 
+					+ (GetGValue(temp_color) - choose_temp1->point1.y) * (GetGValue(temp_color) - choose_temp1->point1.y)
+					+ (GetBValue(temp_color) - choose_temp1->point1_z) * (GetBValue(temp_color) - choose_temp1->point1_z)
+					<= choose_temp1->radius * choose_temp1->radius)
 				{
-					inStatus = 0;	
-					continue;
+					if (choose_temp1->operation == 3)
+					{						
+						inStatus = 0;	
+					}
 				}
+				else
+				{
+					if (choose_temp1->operation == 1)
+					{
+						inStatus = 0;					
+					}
+				}
+				continue;
 			}
 		}
-	}
+	}	
 	return res;
 }
 
@@ -1113,4 +1292,18 @@ void CLeftView::OnSelectColor()
 	SelectDiolog *td=new SelectDiolog;	
 	td->Create(IDD_SELECT_COLOR,this);
 	td->ShowWindow(SW_SHOW);
+}
+
+
+void CLeftView::OnUpdateSetColor(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->Enable(choose_head != NULL);
+}
+
+
+void CLeftView::OnUpdateSelectColor(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->Enable(choose_head != NULL);
 }
