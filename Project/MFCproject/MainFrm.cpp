@@ -9,7 +9,8 @@
 #include "LeftView.h"
 #include "RightView.h"
 #include <set>
-
+#include <iostream>
+using namespace std;
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -19,7 +20,7 @@ COLORREF color,color1;
 int color_status = 0;//是否改变颜色 0-不改变 1-改变 2-选择了一个点 3-选择了长方体两个点 4-选择了球
 int red,green,blue;
 choose_array *choose_head,*choose_temp1,*choose_temp2,*choose_generate1,*choose_generate2;//generate仅适用于生成新元素
-set<int> color_to_show;
+set<COLORREF> color_to_show;
 
 // CMainFrame
 

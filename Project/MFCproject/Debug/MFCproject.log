@@ -1,8 +1,28 @@
-﻿生成启动时间为 2017/6/10 23:08:02。
+﻿生成启动时间为 2017/6/11 11:53:56。
      1>项目“C:\Users\肖迅东\HomeWork\Project\MFCproject\MFCproject.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\MFCproject.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt MainFrm.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\MFCproject.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt LeftView.cpp MFCproject.cpp MainFrm.cpp ProjectDialog.cpp RightView.cpp SelectDiolog.cpp
+         SelectDiolog.cpp
+         RightView.cpp
+     1>c:\users\肖迅东\homework\project\mfcproject\rightview.cpp(405): warning C4554: “&”: 检查运算符优先级可能存在的错误；使用圆括号阐明优先级
+     1>c:\users\肖迅东\homework\project\mfcproject\rightview.cpp(419): warning C4554: “&”: 检查运算符优先级可能存在的错误；使用圆括号阐明优先级
+         ProjectDialog.cpp
          MainFrm.cpp
+         MFCproject.cpp
+         LeftView.cpp
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(176): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(294): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(295): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(300): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(301): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(306): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(307): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(308): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(309): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(314): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(315): warning C4244: “=”: 从“double”转换到“LONG”，可能丢失数据
+     1>c:\users\肖迅东\homework\project\mfcproject\leftview.cpp(316): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+         正在生成代码...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\肖迅东\HomeWork\Project\Debug\MFCproject.exe" /INCREMENTAL /NOLOGO glut32.lib glut.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"C:\Users\肖迅东\HomeWork\Project\Debug\MFCproject.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\肖迅东\HomeWork\Project\Debug\MFCproject.lib" /MACHINE:X86 Debug\MFCproject.res
          Debug\LeftView.obj
@@ -14,9 +34,10 @@
          Debug\RightView.obj
          Debug\SelectDiolog.obj
          Debug\stdafx.obj
+         LINK : 没有找到 C:\Users\肖迅东\HomeWork\Project\Debug\MFCproject.exe 或上一个增量链接没有生成它；正在执行完全链接
          MFCproject.vcxproj -> C:\Users\肖迅东\HomeWork\Project\Debug\MFCproject.exe
      1>已完成生成项目“C:\Users\肖迅东\HomeWork\Project\MFCproject\MFCproject.vcxproj”(Build 个目标)的操作。
 
 生成成功。
 
-已用时间 00:00:01.45
+已用时间 00:00:04.66
