@@ -47,11 +47,30 @@ void SelectDiolog::OnBnClickedOk()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	int wrong = 0;
+	int wrong1 = 0;
 	CString strText(_T(""));
+	CString test(_T(""));
 	GetDlgItemText(IDC_SELECT,strText);
+	GetDlgItemText(IDC_SELECT2,test);
 	if (strText == _T(""))
 	{
 		wrong += 1;
+	}
+	if (test == _T(""))
+	{
+		wrong1 += 1;
+	}
+	if (test == _T("交"))
+	{
+		temp_operation = 1;
+	}
+	if (test == _T("差"))
+	{
+		temp_operation = 3;
+	}
+	if (test != _T("差") && test != _T("交"))
+	{
+		wrong1 += 2;
 	}
 	CEdit *pBox1,*pBox2,*pBox3,*pBox4,*pBox5,*pBox6;
 	pBox1 = (CEdit*) GetDlgItem(IDC_EDIT1);
@@ -102,7 +121,7 @@ void SelectDiolog::OnBnClickedOk()
 	{
 		color_status += 128;
 	}
-	if (wrong == 0)
+	if ((wrong == 0) && (wrong1 == 0))
 	{
 		///MessageBox(_T("R值为:") + str1 + _T("\nG值为:") + str2 + _T("\nB值为:") + str3,_T("程序运行结果"),MB_OK);
 		//输出提示框,只用于测试,交作业时加注释
@@ -111,43 +130,52 @@ void SelectDiolog::OnBnClickedOk()
 		color1 = RGB(r1,g1,b1);
 		if (strText == _T("点"))
 		{
-			color_status = 2;
+			temp_choose = 1;
 		}
 		if (strText == _T("球"))
 		{
-			color_status = 4;
+			temp_choose = 3;
 		}
 		if (strText == _T("长方体"))
 		{
-			color_status = 3;
+			temp_choose = 2;
 		}
 		CDialog::OnOK();
 		color_select_status = 1;
+		
 	}
 	else
 	{
 		str_wrong = _T("");
 		if (wrong % 2 == 1)
 		{
-			str_wrong += _T("未选择范围");
+			str_wrong += _T("未选择范围\n");
 		}
 		else
 		{
 			if ((wrong / 128) % 2 == 1)
-				str_wrong += _T("选择范围错误");
+				str_wrong += _T("选择范围错误\n");
+		}
+		if (wrong1 % 2 == 1)
+		{
+			str_wrong += _T("未选择逻辑运算\n");
+		}
+		if ((wrong1 / 2) % 2 == 1)
+		{
+			str_wrong += _T("选择逻辑运算错误\n");
 		}
 		if ((wrong / 2) % 2 == 1)
-			str_wrong += _T("第一个点R值错误");
+			str_wrong += _T("第一个点R值错误\n");
 		if ((wrong / 4) % 2 == 1)
-			str_wrong += _T("第一个点G值错误");
+			str_wrong += _T("第一个点G值错误\n");
 		if ((wrong / 8) % 2 == 1)
-			str_wrong += _T("第一个点B值错误");
+			str_wrong += _T("第一个点B值错误\n");
 		if ((wrong / 16) % 2 == 1)
-			str_wrong += _T("第二个点R值错误");
+			str_wrong += _T("第二个点R值错误\n");
 		if ((wrong / 32) % 2 == 1)
-			str_wrong += _T("第二个点G值错误");
+			str_wrong += _T("第二个点G值错误\n");
 		if ((wrong / 64) % 2 == 1)
-			str_wrong += _T("第二个点B值错误");
+			str_wrong += _T("第二个点B值错误\n");
 		MessageBox(str_wrong,_T("错误提示"),MB_OK);
 	}
 }

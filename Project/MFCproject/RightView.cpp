@@ -4,8 +4,9 @@
 #include "stdafx.h"
 #include "MFCproject.h"
 #include "RightView.h"
-#include "ProjectDialog.h"
 #include <cmath>
+#include "ProjectDialog.h"
+#include "SelectDiolog.h"
 
 //#pragma comment(linker,"/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
 // CRightView
@@ -31,15 +32,31 @@ CRightView::~CRightView()
 
 BEGIN_MESSAGE_MAP(CRightView, CView)
 	ON_COMMAND(ID_EDIT_REFRESH, &CRightView::OnEditRefresh)
-//	ON_WM_LBUTTONUP()
-//ON_COMMAND(ID_SELECT_COLOR, &CRightView::OnSelectColor)
-ON_WM_CREATE()
-ON_WM_DESTROY()
-ON_WM_SIZE()
-ON_WM_ERASEBKGND()
-ON_WM_MOUSEHWHEEL()
-ON_WM_MOUSEWHEEL()
-ON_WM_MOUSEMOVE()
+	//ON_WM_LBUTTONUP()
+	//ON_COMMAND(ID_SELECT_COLOR, &CRightView::OnSelectColor)
+	ON_WM_CREATE()
+	ON_WM_DESTROY()
+	ON_WM_SIZE()
+	ON_WM_ERASEBKGND()
+	ON_WM_MOUSEHWHEEL()
+	ON_WM_MOUSEWHEEL()
+	ON_WM_MOUSEMOVE()
+	ON_COMMAND(ID_AND, &CRightView::OnAnd)
+	ON_COMMAND(ID_OR, &CRightView::OnOr)
+	ON_COMMAND(ID_MINUS, &CRightView::OnMinus)
+	ON_UPDATE_COMMAND_UI(ID_AND, &CRightView::OnUpdateAnd)
+	ON_UPDATE_COMMAND_UI(ID_OR, &CRightView::OnUpdateOr)
+	ON_UPDATE_COMMAND_UI(ID_MINUS, &CRightView::OnUpdateMinus)
+	ON_COMMAND(ID_CHOOSE_POINT, &CRightView::OnChoosePoint)
+	ON_COMMAND(ID_CHOOSE_RECT, &CRightView::OnChooseRect)
+	ON_COMMAND(ID_CHOOSE_CIRCLE, &CRightView::OnChooseCircle)
+	ON_UPDATE_COMMAND_UI(ID_CHOOSE_CIRCLE, &CRightView::OnUpdateChooseCircle)
+	ON_UPDATE_COMMAND_UI(ID_CHOOSE_POINT, &CRightView::OnUpdateChoosePoint)
+	ON_UPDATE_COMMAND_UI(ID_CHOOSE_RECT, &CRightView::OnUpdateChooseRect)
+	ON_COMMAND(ID_SET_COLOR, &CRightView::OnSetColor)
+	ON_COMMAND(ID_SELECT_COLOR, &CRightView::OnSelectColor)
+	ON_UPDATE_COMMAND_UI(ID_SET_COLOR, &CRightView::OnUpdateSetColor)
+	ON_UPDATE_COMMAND_UI(ID_SELECT_COLOR, &CRightView::OnUpdateSelectColor)
 END_MESSAGE_MAP()
 
 
@@ -299,14 +316,12 @@ void CRightView::RenderScene()
 	ordination();
 	glPopMatrix();
 
-	//画选择集中的点
-	
 
 }
 
 void CRightView::ordination() {
 
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     glEnable(GL_POINT_SMOOTH);                   //设置反走样
     glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);       //设置反走样
@@ -316,7 +331,7 @@ void CRightView::ordination() {
     glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
     glRotatef(-45, 0.0, 1.0, 0.0);
     //网格
-    glPushMatrix();
+   /* glPushMatrix();
 
     glColor3f(1.0f, 1.0f, 0.0f);
     glTranslatef(-4, -4, -4);
@@ -337,52 +352,85 @@ void CRightView::ordination() {
     glRotatef(90, 0.0, 0.0, 1.0);
     glColor3f(0.9f, 0.0f, 0.9f);
     GLGrid(0, 0, 0, 8, 0, 8 ,20);
-    glPopMatrix();//xz
+    glPopMatrix();//xz*/
 
     //x
     //glTranslatef(-2, -2, -2);
     glColor3f(1.0f, 0.0f, 0.0f);
     glBegin(GL_LINES);
     glVertex3f(0.0f, 0.0f, 0.0f);
-    glVertex3f(3.5, 0.0f, 0.0f);
+    glVertex3f(5, 0.0f, 0.0f);
     glEnd();
     glPushMatrix();
-    glTranslatef(3.5, 0.0f, 0.0f);
+    glTranslatef(5, 0.0f, 0.0f);
     glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
-    glutWireCone(0.027, 0.09, 10, 10);
+    glutWireCone(0.09, 0.3, 10, 10);
     glPopMatrix();
+	for (int i = 1;i <=9;i++)
+	{
+		glBegin(GL_LINES);
+		glVertex3f(0.5 * i, 0.0f, 0.0f);
+		glVertex3f(0.5 * i, 0.1f, 0.0f);
+		glEnd();
+	}
 
 
     //y
     glColor3f(0.0f, 1.0f, 0.0f);
     glBegin(GL_LINES);
     glVertex3f(0.0f, 0.0f, 0.0f);
-    glVertex3f(0.0, 3.5, 0.0f);
+    glVertex3f(0.0, 5, 0.0f);
     glEnd();
     glPushMatrix();
-    glTranslatef(0.0, 3.5, 0.0f);
+    glTranslatef(0.0, 5, 0.0f);
     glRotatef(90.0f, -1.0f, 0.0f, 0.0f);
-    glutWireCone(0.027, 0.09, 10, 10);
+    glutWireCone(0.09, 0.3, 10, 10);
     glPopMatrix();
+	for (int i = 1;i <= 9;i++)
+	{
+		glBegin(GL_LINES);
+		glVertex3f( 0.0f,0.5 * i, 0.0f);
+		glVertex3f(0.0f, 0.5 * i, 0.1f);
+		glEnd();
+	}
 
 
     //z
     glColor3f(0.0f, 0.0f, 1.0f);
     glBegin(GL_LINES);
     glVertex3f(0.0f, 0.0f, 0.0f);
-    glVertex3f(0.0, 0.0f, 3.5);
+    glVertex3f(0.0, 0.0f, 5);
     glEnd();
     glPushMatrix();
-    glTranslatef(0.0, 0.0f, 3.5);
+    glTranslatef(0.0, 0.0f, 5);
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
-    glutWireCone(0.027, 0.09, 10, 10);
+    glutWireCone(0.09, 0.3, 10, 10);
     glPopMatrix();
-
-
-    glDisable(GL_BLEND);
+	for (int i = 1;i <= 9;i++)
+	{
+		glBegin(GL_LINES);
+		glVertex3f( 0.0f, 0.0f, 0.5 * i);
+		glVertex3f( 0.1f, 0.0f,0.5 * i);
+		glEnd();
+	}
+	
+	glDisable(GL_BLEND);
     glDisable(GL_LINE_SMOOTH);
     glDisable(GL_POINT_SMOOTH);
     glDisable(GL_POLYGON_SMOOTH);
+	
+	set<COLORREF>::iterator it;
+	glColor3f(1.0f,1.0f,0.0f);
+	glPointSize(1.2f);
+	glBegin(GL_POINTS);
+	for (it = color_to_show.begin();it != color_to_show.end();it++)
+	{
+		float r = ((float)GetRValue(*it)) / 64.0;
+		float g = ((float)GetGValue(*it)) / 64.0;
+		float b = ((float)GetBValue(*it)) / 64.0;
+		glVertex3f(r,g,b);
+	}
+	glEnd();
 
 }
 
@@ -495,4 +543,132 @@ BOOL CRightView::PreTranslateMessage(MSG* pMsg)
 		}
 	}
 	return CView::PreTranslateMessage(pMsg);
+}
+
+
+void CRightView::OnAnd()
+{
+	// TODO: 在此添加命令处理程序代码
+	operation = 1;
+	Invalidate();
+}
+
+
+void CRightView::OnOr()
+{
+	// TODO: 在此添加命令处理程序代码
+	operation = 2;
+	Invalidate();
+}
+
+
+void CRightView::OnMinus()
+{
+	// TODO: 在此添加命令处理程序代码
+	operation  = 3;
+	Invalidate();
+}
+
+
+void CRightView::OnUpdateAnd(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(operation == 1);
+	pCmdUI->Enable(!((choose_circle == 2) || (choose_rect == 2)));
+}
+
+
+void CRightView::OnUpdateOr(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(operation == 2);
+	pCmdUI->Enable(!((choose_circle == 2) || (choose_rect == 2)));
+}
+
+
+void CRightView::OnUpdateMinus(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(operation == 3);
+	pCmdUI->Enable(!((choose_circle == 2) || (choose_rect == 2)));
+}
+
+
+void CRightView::OnChoosePoint()
+{
+	// TODO: 在此添加命令处理程序代码
+	choose_status = 1;
+	Invalidate();
+}
+
+
+void CRightView::OnChooseRect()
+{
+	// TODO: 在此添加命令处理程序代码
+	choose_status = 2;
+	Invalidate();
+}
+
+
+void CRightView::OnChooseCircle()
+{
+	// TODO: 在此添加命令处理程序代码
+	choose_status = 3;
+	Invalidate();
+}
+
+
+void CRightView::OnUpdateChooseCircle(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(choose_status == 3);
+	pCmdUI->Enable(!((choose_circle == 2) || (choose_rect == 2)));
+}
+
+
+void CRightView::OnUpdateChoosePoint(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(choose_status == 1);
+	pCmdUI->Enable(!((choose_circle == 2) || (choose_rect == 2)));
+}
+
+
+void CRightView::OnUpdateChooseRect(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(choose_status == 2);
+	pCmdUI->Enable (!((choose_circle == 2) || (choose_rect == 2)));
+}
+
+
+void CRightView::OnSetColor()
+{
+	// TODO: 在此添加命令处理程序代码
+	ProjectDialog *td=new ProjectDialog;
+	td->Create(IDD_SET_COLOR,this);
+	td->ShowWindow(SW_SHOW);
+}
+
+
+void CRightView::OnSelectColor()
+{
+	// TODO: 在此添加命令处理程序代码
+	SelectDiolog *td=new SelectDiolog;	
+	td->Create(IDD_SELECT_COLOR,this);
+	td->ShowWindow(SW_SHOW);
+}
+
+
+void CRightView::OnUpdateSetColor(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->Enable(choose_head != NULL && choose_rect == 1 && choose_circle == 1);
+}
+
+
+void CRightView::OnUpdateSelectColor(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->Enable(choose_head != NULL && choose_rect == 1 && choose_circle == 1);
 }

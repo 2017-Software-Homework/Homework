@@ -67,6 +67,22 @@ public:
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnAnd();
+	afx_msg void OnOr();
+	afx_msg void OnMinus();
+	afx_msg void OnUpdateAnd(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateOr(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateMinus(CCmdUI *pCmdUI);
+	afx_msg void OnChoosePoint();
+	afx_msg void OnChooseRect();
+	afx_msg void OnChooseCircle();
+	afx_msg void OnUpdateChooseCircle(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateChoosePoint(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateChooseRect(CCmdUI *pCmdUI);
+	afx_msg void OnSetColor();
+	afx_msg void OnSelectColor();
+	afx_msg void OnUpdateSetColor(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateSelectColor(CCmdUI *pCmdUI);
 };
 
 

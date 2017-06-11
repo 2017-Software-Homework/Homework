@@ -157,32 +157,32 @@ void CLeftView::ShowBitmap(CString BmpName,CDC *pDC)
 		choose_generate2->next = choose_generate1;
 		choose_generate2 = choose_generate1;
 	}
-	if (color_status >= 2 && color_status <= 4)
+	if (color_select_status == 1)
 	{
-		color_status = 0;
+		color_select_status = 0;
 		choose_generate1 = new choose_array;
 		choose_generate1->left_or_right = 1;
-		choose_generate1->choose = color_status - 1;
-		choose_generate1->operation = operation;
+		choose_generate1->choose = temp_choose;	
+		choose_generate1->operation = temp_operation;
 		choose_generate1->point1.x = GetRValue(color);
 		choose_generate1->point1.y = GetGValue(color);
 		choose_generate1->point1_z = GetBValue(color);
-		if (color_status == 3)
+		if (temp_choose == 2)
 		{
 			choose_generate1->point2.x = GetRValue(color1);
 			choose_generate1->point2.y = GetGValue(color1);
 			choose_generate1->point2_z = GetBValue(color1);
 		}
-		if (color_status == 4)
+		if (temp_choose == 3)
 		{
 			choose_generate1->radius = sqrt(double( (GetRValue(color) - GetRValue(color1)) * (GetRValue(color) - GetRValue(color1)) + (GetGValue(color) - GetGValue(color1)) * (GetGValue(color) - GetGValue(color1)) + (GetBValue(color) - GetBValue(color1)) * (GetBValue(color) - GetBValue(color1))));
 		}
 		choose_generate1->next = NULL;
 		choose_generate2->next = choose_generate1;
-		choose_generate2 = choose_generate1;
+		choose_generate2 = choose_generate1;	
 	}
 		
-	if (!((choose_status == 2 && choose_rect == 2) || (choose_status == 2 && choose_circle == 2)))
+	if (!((choose_status == 2 && choose_rect == 2) || (choose_status == 3 && choose_circle == 2)))
 	{
 		int x,y;
 		CPoint temp;
@@ -775,19 +775,17 @@ bool CLeftView::IsInChoose(CPoint p,CDC *pDC)
 			}
 			if (choose_temp1->choose == 2)
 			{
-				if (((choose_temp1->point1.x <= GetRValue(temp_color)) && 
-					(choose_temp1->point2.x >= GetRValue(temp_color)) && 
-					(choose_temp1->point1.y <= GetGValue(temp_color)) && 
-					(choose_temp1->point2.y >= GetGValue(temp_color)) && 
-					(choose_temp1->point1_z <= GetBValue(temp_color))&& 
-					(choose_temp1->point2_z >= GetBValue(temp_color)))
-					|| 
-					((choose_temp1->point2.x <= GetRValue(temp_color)) && 
-					(choose_temp1->point1.x >= GetRValue(temp_color)) && 
-					(choose_temp1->point2.y <= GetGValue(temp_color)) && 
-					(choose_temp1->point1.y >= GetGValue(temp_color)) && 
-					(choose_temp1->point2_z <= GetBValue(temp_color))&& 
-					(choose_temp1->point1_z >= GetBValue(temp_color))))
+				if ((((choose_temp1->point1.x <= GetRValue(temp_color)) && (choose_temp1->point2.x >= GetRValue(temp_color)))
+					||
+					((choose_temp1->point2.x <= GetRValue(temp_color)) && (choose_temp1->point1.x >= GetRValue(temp_color))))
+					&&
+					(((choose_temp1->point1.y <= GetGValue(temp_color)) && (choose_temp1->point2.y >= GetGValue(temp_color)))
+					||
+					((choose_temp1->point2.y <= GetGValue(temp_color)) && (choose_temp1->point1.y >= GetGValue(temp_color))))
+					&&
+					(((choose_temp1->point1_z <= GetBValue(temp_color)) && (choose_temp1->point2_z >= GetBValue(temp_color)))
+					||
+					((choose_temp1->point2_z <= GetBValue(temp_color)) && (choose_temp1->point1_z >= GetBValue(temp_color)))))
 				{
 					if (choose_temp1->operation == 3)
 					{						
@@ -1018,19 +1016,17 @@ bool CLeftView::ChangeOrNot(CPoint p,CDC *pDC)
 			}
 			if (choose_temp1->choose == 2)
 			{
-				if (((choose_temp1->point1.x <= GetRValue(temp_color)) && 
-					(choose_temp1->point2.x >= GetRValue(temp_color)) && 
-					(choose_temp1->point1.y <= GetGValue(temp_color)) && 
-					(choose_temp1->point2.y >= GetGValue(temp_color)) && 
-					(choose_temp1->point1_z <= GetBValue(temp_color))&& 
-					(choose_temp1->point2_z >= GetBValue(temp_color)))
-					|| 
-					((choose_temp1->point2.x <= GetRValue(temp_color)) && 
-					(choose_temp1->point1.x >= GetRValue(temp_color)) && 
-					(choose_temp1->point2.y <= GetGValue(temp_color)) && 
-					(choose_temp1->point1.y >= GetGValue(temp_color)) && 
-					(choose_temp1->point2_z <= GetBValue(temp_color))&& 
-					(choose_temp1->point1_z >= GetBValue(temp_color))))
+				if ((((choose_temp1->point1.x <= GetRValue(temp_color)) && (choose_temp1->point2.x >= GetRValue(temp_color)))
+					||
+					((choose_temp1->point2.x <= GetRValue(temp_color)) && (choose_temp1->point1.x >= GetRValue(temp_color))))
+					&&
+					(((choose_temp1->point1.y <= GetGValue(temp_color)) && (choose_temp1->point2.y >= GetGValue(temp_color)))
+					||
+					((choose_temp1->point2.y <= GetGValue(temp_color)) && (choose_temp1->point1.y >= GetGValue(temp_color))))
+					&&
+					(((choose_temp1->point1_z <= GetBValue(temp_color)) && (choose_temp1->point2_z >= GetBValue(temp_color)))
+					||
+					((choose_temp1->point2_z <= GetBValue(temp_color)) && (choose_temp1->point1_z >= GetBValue(temp_color)))))
 				{
 					if (choose_temp1->operation == 3)
 					{						
@@ -1230,19 +1226,17 @@ COLORREF CLeftView::ColorChangeTo(CPoint p,CDC *pDC)
 			}
 			if (choose_temp1->choose == 2)
 			{
-				if (((choose_temp1->point1.x <= GetRValue(temp_color)) && 
-					(choose_temp1->point2.x >= GetRValue(temp_color)) && 
-					(choose_temp1->point1.y <= GetGValue(temp_color)) && 
-					(choose_temp1->point2.y >= GetGValue(temp_color)) && 
-					(choose_temp1->point1_z <= GetBValue(temp_color))&& 
-					(choose_temp1->point2_z >= GetBValue(temp_color)))
-					|| 
-					((choose_temp1->point2.x <= GetRValue(temp_color)) && 
-					(choose_temp1->point1.x >= GetRValue(temp_color)) && 
-					(choose_temp1->point2.y <= GetGValue(temp_color)) && 
-					(choose_temp1->point1.y >= GetGValue(temp_color)) && 
-					(choose_temp1->point2_z <= GetBValue(temp_color))&& 
-					(choose_temp1->point1_z >= GetBValue(temp_color))))
+				if ((((choose_temp1->point1.x <= GetRValue(temp_color)) && (choose_temp1->point2.x >= GetRValue(temp_color)))
+					||
+					((choose_temp1->point2.x <= GetRValue(temp_color)) && (choose_temp1->point1.x >= GetRValue(temp_color))))
+					&&
+					(((choose_temp1->point1.y <= GetGValue(temp_color)) && (choose_temp1->point2.y >= GetGValue(temp_color)))
+					||
+					((choose_temp1->point2.y <= GetGValue(temp_color)) && (choose_temp1->point1.y >= GetGValue(temp_color))))
+					&&
+					(((choose_temp1->point1_z <= GetBValue(temp_color)) && (choose_temp1->point2_z >= GetBValue(temp_color)))
+					||
+					((choose_temp1->point2_z <= GetBValue(temp_color)) && (choose_temp1->point1_z >= GetBValue(temp_color)))))
 				{
 					if (choose_temp1->operation == 3)
 					{						
@@ -1298,12 +1292,12 @@ void CLeftView::OnSelectColor()
 void CLeftView::OnUpdateSetColor(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
-	pCmdUI->Enable(choose_head != NULL);
+	pCmdUI->Enable(choose_head != NULL && choose_rect == 1 && choose_circle == 1);
 }
 
 
 void CLeftView::OnUpdateSelectColor(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
-	pCmdUI->Enable(choose_head != NULL);
+	pCmdUI->Enable(choose_head != NULL && choose_rect == 1 && choose_circle == 1);
 }

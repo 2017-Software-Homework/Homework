@@ -251,8 +251,9 @@ BEGIN
     LTEXT           "第一个点",IDC_STATIC,106,21,33,8
     LTEXT           "第二个点",IDC_STATIC,189,21,33,8
     LTEXT           "R:",IDC_STATIC,88,38,8,8
-    LTEXT           "G:",IDC_STATIC,86,78,8,8
+    LTEXT           "G:",IDC_STATIC,86,82,8,8
     LTEXT           "B:",IDC_STATIC,85,118,8,8
+    COMBOBOX        IDC_SELECT2,17,78,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
 END
 
 
@@ -359,6 +360,10 @@ BEGIN
 0xa4b3, 0xbdb7, 0xe5cc, "\000" 
     IDC_SELECT, 0x403, 3, 0
 0xf2c7, "\000" 
+    IDC_SELECT2, 0x403, 3, 0
+0xbbbd, "\000" 
+    IDC_SELECT2, 0x403, 3, 0
+0xeeb2, "\000" 
     0
 END
 

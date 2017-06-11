@@ -5,7 +5,7 @@ extern COLORREF color_to_set,color,color1;
 extern int color_change;
 extern int color_status;
 extern int red,green,blue;
-
+extern int operation;
 
 
 class CLeftView : public CView
@@ -13,7 +13,7 @@ class CLeftView : public CView
 	DECLARE_DYNCREATE(CLeftView)
 
 public:	
-	int choose_status,operation,choose_rect,choose_circle,load_status,show_status;
+	
 	double zoom;
 	int m_startX;
 	int m_startY;//Õº∆¨œ‡∂‘Œª÷√

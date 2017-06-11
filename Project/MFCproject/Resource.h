@@ -19,7 +19,7 @@
 #define IDC_MFCCOLORBUTTON1             1005
 #define IDC_EDIT6                       1005
 #define IDC_SELECT                      1007
-#define IDC_EDIT30                      1013
+#define IDC_SELECT2                     1008
 #define ID_32771                        32771
 #define ID_32772                        32772
 #define ID_32773                        32773

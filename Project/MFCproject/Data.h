@@ -9,7 +9,10 @@ extern int color_status;
 extern int red,green,blue;
 extern set<COLORREF> color_to_show;
 extern int color_select_status;
-
+extern int operation;
+extern int choose_status,choose_rect,choose_circle,load_status,show_status;
+extern int temp_operation;
+extern int temp_choose;
 
 struct choose_array
 {
