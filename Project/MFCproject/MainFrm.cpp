@@ -27,6 +27,7 @@ int choose_status,choose_rect,choose_circle,load_status,show_status;
 int temp_operation;
 int temp_choose;
 
+
 // CMainFrame
 
 IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)

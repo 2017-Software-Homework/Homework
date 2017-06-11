@@ -1,0 +1,21 @@
+﻿生成启动时间为 2017/6/11 20:47:54。
+     1>项目“C:\Users\肖迅东\HomeWork\Project\MFCproject\MFCproject.vcxproj”在节点 2 上(Build 个目标)。
+     1>ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.0\bin\x86\rc.exe /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /l"0x0804" /IDebug\ /nologo /fo"Debug\MFCproject.res" MFCproject.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\肖迅东\HomeWork\Project\Debug\MFCproject.exe" /INCREMENTAL /NOLOGO glut32.lib glut.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"C:\Users\肖迅东\HomeWork\Project\Debug\MFCproject.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\肖迅东\HomeWork\Project\Debug\MFCproject.lib" /MACHINE:X86 Debug\MFCproject.res
+         Debug\LeftView.obj
+         Debug\MainFrm.obj
+         Debug\MFCproject.obj
+         Debug\MFCprojectDoc.obj
+         Debug\MFCprojectView.obj
+         Debug\ProjectDialog.obj
+         Debug\RightView.obj
+         Debug\SelectDiolog.obj
+         Debug\stdafx.obj
+         MFCproject.vcxproj -> C:\Users\肖迅东\HomeWork\Project\Debug\MFCproject.exe
+     1>已完成生成项目“C:\Users\肖迅东\HomeWork\Project\MFCproject\MFCproject.vcxproj”(Build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:00.70

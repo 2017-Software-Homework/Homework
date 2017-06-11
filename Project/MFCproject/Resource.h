@@ -40,13 +40,16 @@
 #define ID_32788                        32788
 #define ID_32789                        32789
 #define ID_SELECT_COLOR                 32790
+#define ID_32791                        32791
+#define ID_SHOW_INFORMATION             32792
+#define ID_VIEW_INFORMATION             32793
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        319
-#define _APS_NEXT_COMMAND_VALUE         32791
+#define _APS_NEXT_COMMAND_VALUE         32794
 #define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

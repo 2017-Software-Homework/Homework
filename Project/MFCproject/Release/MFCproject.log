@@ -1,0 +1,26 @@
+﻿生成启动时间为 2017/6/11 21:08:53。
+     1>项目“C:\Users\肖迅东\HomeWork\Project\MFCproject\MFCproject.vcxproj”在节点 2 上(Build 个目标)。
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D _WINDOWS /D NDEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Release\MFCproject.pch" /Fo"Release\\" /Fd"Release\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt RightView.cpp
+         RightView.cpp
+     1>RightView.cpp(457): warning C4554: “&”: 检查运算符优先级可能存在的错误；使用圆括号阐明优先级
+     1>RightView.cpp(471): warning C4554: “&”: 检查运算符优先级可能存在的错误；使用圆括号阐明优先级
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\肖迅东\HomeWork\Project\Release\MFCproject.exe" /INCREMENTAL:NO /NOLOGO /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"C:\Users\肖迅东\HomeWork\Project\Release\MFCproject.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\肖迅东\HomeWork\Project\Release\MFCproject.lib" /MACHINE:X86 /SAFESEH /SAFESEH:NO Release\MFCproject.res
+         Release\LeftView.obj
+         Release\MainFrm.obj
+         Release\MFCproject.obj
+         Release\MFCprojectDoc.obj
+         Release\MFCprojectView.obj
+         Release\ProjectDialog.obj
+         Release\RightView.obj
+         Release\SelectDiolog.obj
+         Release\stdafx.obj
+         正在生成代码
+         已完成代码的生成
+         MFCproject.vcxproj -> C:\Users\肖迅东\HomeWork\Project\Release\MFCproject.exe
+     1>已完成生成项目“C:\Users\肖迅东\HomeWork\Project\MFCproject\MFCproject.vcxproj”(Build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:02.49

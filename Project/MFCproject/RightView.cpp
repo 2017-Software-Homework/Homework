@@ -57,6 +57,10 @@ BEGIN_MESSAGE_MAP(CRightView, CView)
 	ON_COMMAND(ID_SELECT_COLOR, &CRightView::OnSelectColor)
 	ON_UPDATE_COMMAND_UI(ID_SET_COLOR, &CRightView::OnUpdateSetColor)
 	ON_UPDATE_COMMAND_UI(ID_SELECT_COLOR, &CRightView::OnUpdateSelectColor)
+	ON_COMMAND(ID_VIEW_INFORMATION, &CRightView::OnViewInformation)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_INFORMATION, &CRightView::OnUpdateViewInformation)
+	ON_COMMAND(ID_VIEW_SHOW, &CRightView::OnViewShow)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_SHOW, &CRightView::OnUpdateViewShow)
 END_MESSAGE_MAP()
 
 
@@ -671,4 +675,36 @@ void CRightView::OnUpdateSelectColor(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 	pCmdUI->Enable(choose_head != NULL && choose_rect == 1 && choose_circle == 1);
+}
+
+
+void CRightView::OnViewInformation()
+{
+	// TODO: 在此添加命令处理程序代码
+	load_status = load_status == 0 ? 1: 0;
+	Invalidate();
+}
+
+
+void CRightView::OnUpdateViewInformation(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(load_status == 1);
+	pCmdUI->Enable(true);
+}
+
+
+void CRightView::OnViewShow()
+{
+	// TODO: 在此添加命令处理程序代码
+	show_status = show_status == 1? 0 : 1;
+	Invalidate();
+}
+
+
+void CRightView::OnUpdateViewShow(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(show_status == 1);
+	pCmdUI->Enable(true);
 }

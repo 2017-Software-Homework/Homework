@@ -72,4 +72,8 @@ public:
 	afx_msg void OnSelectColor();
 	afx_msg void OnUpdateSetColor(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateSelectColor(CCmdUI *pCmdUI);
+	afx_msg void OnFileSave();
+	afx_msg void OnFileSaveAs();
+	afx_msg void OnViewInformation();
+	afx_msg void OnUpdateViewInformation(CCmdUI *pCmdUI);
 };

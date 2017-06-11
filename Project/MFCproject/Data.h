@@ -14,6 +14,7 @@ extern int choose_status,choose_rect,choose_circle,load_status,show_status;
 extern int temp_operation;
 extern int temp_choose;
 
+
 struct choose_array
 {
 	bool left_or_right;//选择左边视图还是右边视图 左-LEFT-0 右-RIGHT-1

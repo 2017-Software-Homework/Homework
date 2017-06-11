@@ -11,7 +11,6 @@
 // CLeftView
 
 
-
 IMPLEMENT_DYNCREATE(CLeftView, CView)
 
 CLeftView::CLeftView()
@@ -62,6 +61,10 @@ ON_COMMAND(ID_EDIT_CLEAR, &CLeftView::OnEditClear)
 ON_COMMAND(ID_SELECT_COLOR, &CLeftView::OnSelectColor)
 ON_UPDATE_COMMAND_UI(ID_SET_COLOR, &CLeftView::OnUpdateSetColor)
 ON_UPDATE_COMMAND_UI(ID_SELECT_COLOR, &CLeftView::OnUpdateSelectColor)
+ON_COMMAND(ID_FILE_SAVE, &CLeftView::OnFileSave)
+ON_COMMAND(ID_FILE_SAVE_AS, &CLeftView::OnFileSaveAs)
+ON_COMMAND(ID_VIEW_INFORMATION, &CLeftView::OnViewInformation)
+ON_UPDATE_COMMAND_UI(ID_VIEW_INFORMATION, &CLeftView::OnUpdateViewInformation)
 END_MESSAGE_MAP()
 
 
@@ -238,7 +241,6 @@ void CLeftView::ShowBitmap(CString BmpName,CDC *pDC)
 	dcBmp.SelectObject(pbmpOld);
 	DeleteObject(&m_bitmap);
 	dcBmp.DeleteDC();
-	load_status = 1;
 //	Invalidate();
 	
 }
@@ -300,6 +302,7 @@ void CLeftView::OnFileOpen()
 		BmpName.Format(_T("%s"),dlg.GetPathName());
 		extname = dlg.GetFileExt();
 		extname.MakeLower();
+		load_status = 1;
 		Invalidate();
 	}
 	// TODO: 在此添加命令处理程序代码
@@ -623,6 +626,7 @@ void CLeftView::OnUpdateViewShow(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 	pCmdUI->SetCheck(show_status == 1);
+	pCmdUI->Enable(true);
 }
 
 
@@ -1300,4 +1304,58 @@ void CLeftView::OnUpdateSelectColor(CCmdUI *pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码
 	pCmdUI->Enable(choose_head != NULL && choose_rect == 1 && choose_circle == 1);
+}
+
+
+void CLeftView::OnFileSave()
+{
+	// TODO: 在此添加命令处理程序代码
+}
+
+
+void CLeftView::OnFileSaveAs()
+{
+	// TODO: 在此添加命令处理程序代码
+	CClientDC dc(this);
+	CRect rect;
+	GetClientRect(&rect);
+	HBITMAP hbitmap = CreateCompatibleBitmap(dc, rect.right-rect.left, rect. bottom-rect.top); 
+	HDC hdc = CreateCompatibleDC(dc);
+	HBITMAP hOldMap = (HBITMAP)SelectObject(hdc,hbitmap);   
+	BitBlt(hdc,0,0,rect.right-rect.left,rect.bottom-rect.top,dc,0,0,SRCCOPY);
+	CImage image;
+	image.Attach(hbitmap);
+	 CString  strFilter = _T("位图文件(*.bmp)|*.bmp|JPEG 图像文件|*.jpg|GIF图像文件|*.gif|PNG图像文件|*.png|其他格式(*.*)|*.*||");
+	CFileDialog  dlg(FALSE,_T("bmp"),_T("iPaint1.bmp"),NULL,strFilter); 
+	if (dlg.DoModal()!=IDOK)    
+		return;
+	CString strExtension = _T("bmp");
+	CString strFileName = dlg.m_ofn.lpstrFile;
+	HRESULT hResult = image.Save(strFileName);
+	if (FAILED(hResult))  
+    {
+		MessageBox(_T("保存图像文件失败！"));   
+	}
+	else
+	{
+		MessageBox(_T("文件保存成功！"));
+	}  
+	image.Detach();
+	SelectObject(hdc,hOldMap);
+}
+
+
+void CLeftView::OnViewInformation()
+{
+	// TODO: 在此添加命令处理程序代码
+	load_status = load_status == 0 ? 1: 0;
+	Invalidate();
+}
+
+
+void CLeftView::OnUpdateViewInformation(CCmdUI *pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码
+	pCmdUI->SetCheck(load_status == 1);
+	pCmdUI->Enable(true);
 }
